@@ -2,8 +2,8 @@ import React from "react";
 import { Handle, Position, NodeResizer } from "@xyflow/react";
 import { X, ChevronDown, ChevronUp } from "lucide-react";
 
-interface BaseNodeProps {
-  data: any;
+interface BaseNodeProps<T = Record<string, unknown>> {
+  data: T & { hasValidInput?: boolean };
   selected?: boolean;
   color: string;
   title: string;
@@ -15,7 +15,7 @@ interface BaseNodeProps {
   onToggleCollapse?: () => void;
 }
 
-export const BaseNode: React.FC<BaseNodeProps> = ({
+export const BaseNode = <T,>({
   data,
   selected,
   color,
@@ -26,15 +26,19 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   onDelete,
   isCollapsed = false,
   onToggleCollapse,
-}) => {
+}: BaseNodeProps<T>) => {
   return (
     <div
       className={`
-        bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 
-        ${selected ? "border-blue-500" : "border-gray-300 dark:border-gray-600"}
+        relative rounded-xl border shadow-xl transition-all duration-200
+        ${
+          selected
+            ? "border-blue-500 shadow-[0_0_0_2px_rgba(59,130,246,0.35)]"
+            : "border-slate-700/70 shadow-[0_20px_40px_rgba(15,23,42,0.35)]"
+        }
+        bg-slate-900/90 text-white overflow-visible
+        backdrop-blur-sm
         min-w-[250px]
-        transition-all duration-200
-        h-full
       `}
     >
       {/* Node Resizer - only show when selected */}
@@ -43,6 +47,10 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
         isVisible={selected}
         minWidth={250}
         minHeight={100}
+        handleClassName="node-resizer-handle"
+        lineClassName="node-resizer-line"
+        handleStyle={{ borderColor: "rgba(15, 23, 42, 0.1)" }}
+        lineStyle={{ borderColor: "transparent", background: "transparent" }}
       />
       {/* Title Bar */}
       <div

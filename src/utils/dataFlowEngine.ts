@@ -2,6 +2,9 @@ import type {
   WorkflowNode,
   WorkflowEdge,
   StartFrameNodeData,
+  SceneCollectionNodeData,
+  SceneShotPlannerNodeData,
+  ShotPlan,
 } from "../types/workflow.types";
 import { processTemplate } from "./templateEngine";
 import { generateImage } from "../services/fal";
@@ -108,6 +111,261 @@ async function processNode(
           output: nodeData.prompt || "",
           success: true,
         };
+      }
+
+      case "sceneCollection": {
+        const collectionData = node.data as SceneCollectionNodeData;
+        const scenes = collectionData.scenes || [];
+        const activeSceneId =
+          collectionData.activeSceneId || scenes[0]?.id || null;
+        const activeScene =
+          scenes.find((scene) => scene.id === activeSceneId) || null;
+
+        return {
+          nodeId: node.id,
+          output: {
+            scenes,
+            activeSceneId,
+            activeScene,
+            activeScenePrompt: activeScene?.prompt || "",
+            activeSceneTitle: activeScene?.title || "",
+            sceneCount: scenes.length,
+          },
+          success: true,
+        };
+      }
+
+      case "sceneShotPlanner": {
+        const plannerData = node.data as SceneShotPlannerNodeData;
+        const incomingEdges = getIncomingEdges(node.id, edges);
+
+        let sceneInput = (plannerData.sceneOverride || "").trim();
+        let sceneTitle: string | undefined;
+        let sceneId: string | undefined;
+
+        if (!sceneInput) {
+          for (const edge of incomingEdges) {
+            const value = inputs.get(edge.source);
+            if (!value) continue;
+
+            if (typeof value === "string" && value.trim()) {
+              sceneInput = value.trim();
+              const sourceNode = nodes.find((n) => n.id === edge.source);
+              if (sourceNode?.data?.label) {
+                sceneTitle = sourceNode.data.label as string;
+              }
+              break;
+            }
+
+            if (typeof value === "object" && value !== null) {
+              const candidate = value as {
+                activeScenePrompt?: string;
+                activeSceneTitle?: string;
+                activeSceneId?: string;
+                prompt?: string;
+                title?: string;
+                id?: string;
+              };
+
+              if (candidate.activeScenePrompt) {
+                sceneInput = String(candidate.activeScenePrompt).trim();
+                sceneTitle = candidate.activeSceneTitle || sceneTitle;
+                sceneId = candidate.activeSceneId || sceneId;
+                if (sceneInput) break;
+              }
+
+              if (candidate.prompt) {
+                sceneInput = String(candidate.prompt).trim();
+                sceneTitle = candidate.title || sceneTitle;
+                sceneId = candidate.id || sceneId;
+                if (sceneInput) break;
+              }
+            }
+          }
+        }
+
+        if (!sceneInput) {
+          return {
+            nodeId: node.id,
+            output: {
+              shotPlan: [],
+              summary: "",
+              totalDurationSeconds: 0,
+              lastSceneTitle: sceneTitle || "",
+              lastSceneId: sceneId || "",
+              lastScenePrompt: "",
+            },
+            success: false,
+            error: "No scene input received",
+          };
+        }
+
+        const planningStyle = plannerData.planStrategy || "balanced";
+        const includeTransitions = plannerData.includeTransitions !== false;
+
+        if (!useAI) {
+          const fallbackShot: ShotPlan = {
+            id: "manual-shot-1",
+            title: "Single Shot",
+            description:
+              "Fallback plan generated without AI. Enable AI to get full coverage.",
+            startFramePrompt: sceneInput,
+            endFramePrompt: sceneInput,
+            videoPrompt: sceneInput,
+            durationSeconds: 6,
+          };
+
+          return {
+            nodeId: node.id,
+            output: {
+              shotPlan: [fallbackShot],
+              summary:
+                "AI disabled: provided a single-shot plan mirroring the scene description.",
+              totalDurationSeconds: fallbackShot.durationSeconds,
+              lastSceneTitle: sceneTitle || "Scene",
+              lastSceneId: sceneId || "",
+              lastScenePrompt: sceneInput,
+            },
+            success: true,
+          };
+        }
+
+        try {
+          const { callClaudeStructured } = await import(
+            "../services/anthropic"
+          );
+
+          const planningPrompt = `You are a senior film director tasked with creating a shot plan for a single scene.
+
+Scene description:
+"""
+${sceneInput}
+"""
+
+Planning style: ${planningStyle}.
+Include transitional bridge shots between major beats: ${
+            includeTransitions ? "yes" : "no"
+          }.
+
+Produce a cinematic shot breakdown that covers the full arc of the scene. Each shot needs:
+1. A descriptive title (avoid generic names)
+2. A vivid description of the visual moment
+3. Estimated duration in seconds (4-12 seconds typical)
+4. A start frame prompt suitable for photorealistic image generation
+5. An end frame prompt that resolves the shot
+6. A video diffusion prompt summarizing motion and continuity for that shot
+7. Optional camera notes (movement, lens, transitions)
+
+Plan just enough shots to cover the entire scene without redundancy. Make sure the prompts stay consistent with characters, setting, and tone.`;
+
+          const planningSchema = `{
+  "summary": "string",
+  "totalDurationSeconds": 120,
+  "shots": [
+    {
+      "id": "string",
+      "title": "string",
+      "description": "string",
+      "durationSeconds": 8,
+      "startFramePrompt": "string",
+      "endFramePrompt": "string",
+      "videoPrompt": "string",
+      "cameraNotes": "string"
+    }
+  ]
+}`;
+
+          const planResult = await callClaudeStructured<{
+            summary?: string;
+            totalDurationSeconds?: number | string;
+            shots?: Array<{
+              id?: string;
+              title?: string;
+              description?: string;
+              durationSeconds?: number | string;
+              startFramePrompt?: string;
+              endFramePrompt?: string;
+              videoPrompt?: string;
+              cameraNotes?: string;
+            }>;
+          }>(planningPrompt, planningSchema);
+
+          const rawShots = Array.isArray(planResult.shots)
+            ? planResult.shots
+            : [];
+
+          const normalizedShots: ShotPlan[] = rawShots.map((shot, index) => {
+            const numericDuration = (() => {
+              if (typeof shot.durationSeconds === "number") {
+                return shot.durationSeconds;
+              }
+              const parsed = parseFloat(String(shot.durationSeconds || ""));
+              return Number.isFinite(parsed) ? parsed : undefined;
+            })();
+
+            return {
+              id: shot.id?.trim() || `shot-${index + 1}`,
+              title: shot.title?.trim() || `Shot ${index + 1}`,
+              description: shot.description?.trim() || "",
+              durationSeconds: numericDuration,
+              startFramePrompt: shot.startFramePrompt?.trim() || "",
+              endFramePrompt: shot.endFramePrompt?.trim() || "",
+              videoPrompt: shot.videoPrompt?.trim() || "",
+              cameraNotes: shot.cameraNotes?.trim() || undefined,
+            };
+          });
+
+          const totalDuration = (() => {
+            if (typeof planResult.totalDurationSeconds === "number") {
+              return planResult.totalDurationSeconds;
+            }
+            const parsed = parseFloat(
+              String(planResult.totalDurationSeconds || "")
+            );
+            if (Number.isFinite(parsed)) {
+              return parsed;
+            }
+            const sum = normalizedShots.reduce((acc, shot) => {
+              return acc + (shot.durationSeconds || 0);
+            }, 0);
+            return sum || normalizedShots.length * 6;
+          })();
+
+          return {
+            nodeId: node.id,
+            output: {
+              shotPlan: normalizedShots,
+              summary:
+                planResult.summary?.trim() ||
+                `Planned ${normalizedShots.length} shot${
+                  normalizedShots.length === 1 ? "" : "s"
+                } covering the full scene.`,
+              totalDurationSeconds: totalDuration,
+              lastSceneTitle: sceneTitle || "Scene",
+              lastSceneId: sceneId || "",
+              lastScenePrompt: sceneInput,
+            },
+            success: true,
+          };
+        } catch (error) {
+          console.error("❌ Scene shot planning failed:", error);
+          return {
+            nodeId: node.id,
+            output: {
+              shotPlan: [],
+              summary: "",
+              totalDurationSeconds: 0,
+              lastSceneTitle: sceneTitle || "Scene",
+              lastSceneId: sceneId || "",
+              lastScenePrompt: sceneInput,
+            },
+            success: false,
+            error:
+              error instanceof Error
+                ? error.message
+                : "Scene shot planning failed",
+          };
+        }
       }
 
       case "startFrame": {

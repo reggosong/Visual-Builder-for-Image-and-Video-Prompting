@@ -72,18 +72,18 @@ function App() {
 
         // Get all currently selected nodes from the store
         const { nodes, edges } = useWorkflowStore.getState();
-        const selectedNodes = nodes.filter((node: any) => node.selected);
-        const selectedEdges = edges.filter((edge: any) => edge.selected);
+        const selectedNodes = nodes.filter((node) => node.selected);
+        const selectedEdges = edges.filter((edge) => edge.selected);
 
         // Delete all selected nodes
         if (selectedNodes.length > 0) {
-          selectedNodes.forEach((node: any) => {
+          selectedNodes.forEach((node) => {
             deleteNode(node.id);
           });
         }
         // If no nodes selected, delete selected edges
         else if (selectedEdges.length > 0) {
-          selectedEdges.forEach((edge: any) => {
+          selectedEdges.forEach((edge) => {
             deleteEdge(edge.id);
           });
         }

@@ -10,12 +10,21 @@ import {
   useReactFlow,
   SelectionMode,
 } from "@xyflow/react";
+import type { NodeTypes } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useWorkflowStore } from "../store/workflowStore";
-import type { NodeType } from "../types/workflow.types";
+import type {
+  NodeType,
+  WorkflowNode,
+  WorkflowEdge,
+  WorkflowNodeData,
+  CustomModuleDefinition,
+} from "../types/workflow.types";
 import {
   InputNode,
+  SceneCollectionNode,
   StartFrameNode,
+  SceneShotPlannerNode,
   EndFrameNode,
   ContinuityPlannerNode,
   ContextPromptNode,
@@ -24,8 +33,10 @@ import {
   OutputNode,
 } from "./nodes";
 
-const nodeTypes = {
+const nodeTypes: NodeTypes = {
   input: InputNode,
+  sceneCollection: SceneCollectionNode,
+  sceneShotPlanner: SceneShotPlannerNode,
   startFrame: StartFrameNode,
   endFrame: EndFrameNode,
   continuityPlanner: ContinuityPlannerNode,
@@ -36,15 +47,41 @@ const nodeTypes = {
 };
 
 // Helper function to create node data based on type
-const createNodeData = (type: NodeType, label: string) => {
-  const baseData: any = {
+const createNodeData = (
+  type: NodeType,
+  label: string
+): WorkflowNodeData & Record<string, unknown> => {
+  const baseData = {
     label,
     type,
-  };
+  } as const;
 
   switch (type) {
     case "input":
-      return { ...baseData, prompt: "" };
+      return { ...baseData, prompt: "" } as WorkflowNodeData &
+        Record<string, unknown>;
+    case "sceneCollection":
+      return {
+        ...baseData,
+        scenes: [
+          {
+            id: `scene-${Date.now()}`,
+            title: "Scene 1",
+            prompt: "",
+          },
+        ],
+        activeSceneId: null,
+        autoSplit: false,
+      } as WorkflowNodeData & Record<string, unknown>;
+    case "sceneShotPlanner":
+      return {
+        ...baseData,
+        planStrategy: "balanced",
+        includeTransitions: true,
+        sceneOverride: "",
+        shotPlan: [],
+        summary: "",
+      } as WorkflowNodeData & Record<string, unknown>;
     case "startFrame":
       return {
         ...baseData,
@@ -52,13 +89,13 @@ const createNodeData = (type: NodeType, label: string) => {
         isManual: false,
         selectedCharacters: [],
         outputStartFrame: true,
-      };
+      } as WorkflowNodeData & Record<string, unknown>;
     case "endFrame":
       return {
         ...baseData,
         extractedValue: "",
         isManual: false,
-      };
+      } as WorkflowNodeData & Record<string, unknown>;
     case "continuityPlanner":
       return {
         ...baseData,
@@ -71,7 +108,7 @@ const createNodeData = (type: NodeType, label: string) => {
         variants: [],
         objects: [],
         isManual: false,
-      };
+      } as WorkflowNodeData & Record<string, unknown>;
     case "contextPrompt":
       return {
         ...baseData,
@@ -79,7 +116,7 @@ const createNodeData = (type: NodeType, label: string) => {
         preview: "",
         inputs: {},
         availableVariables: [],
-      };
+      } as WorkflowNodeData & Record<string, unknown>;
     case "imageGen":
       return {
         ...baseData,
@@ -87,7 +124,7 @@ const createNodeData = (type: NodeType, label: string) => {
         width: 1024,
         height: 1024,
         numberOfImages: 1,
-      };
+      } as WorkflowNodeData & Record<string, unknown>;
     case "llm":
       return {
         ...baseData,
@@ -97,14 +134,14 @@ const createNodeData = (type: NodeType, label: string) => {
         availableVariables: [],
         model: "claude",
         maxTokens: 1024,
-      };
+      } as WorkflowNodeData & Record<string, unknown>;
     case "output":
       return {
         ...baseData,
         finalPrompt: "",
-      };
+      } as WorkflowNodeData & Record<string, unknown>;
     default:
-      return baseData;
+      return baseData as unknown as WorkflowNodeData & Record<string, unknown>;
   }
 };
 
@@ -126,14 +163,14 @@ const CanvasInner: React.FC = () => {
   const { screenToFlowPosition } = useReactFlow();
 
   const handleNodeClick = useCallback(
-    (_: React.MouseEvent, node: any) => {
+    (_: React.MouseEvent, node: WorkflowNode) => {
       setSelectedNode(node);
     },
     [setSelectedNode]
   );
 
   const handleEdgeClick = useCallback(
-    (_: React.MouseEvent, edge: any) => {
+    (_: React.MouseEvent, edge: WorkflowEdge) => {
       setSelectedEdge(edge);
     },
     [setSelectedEdge]
@@ -163,7 +200,9 @@ const CanvasInner: React.FC = () => {
 
       // Check if this is a custom module
       const customConfigStr = event.dataTransfer.getData("customConfig");
-      const customConfig = customConfigStr ? JSON.parse(customConfigStr) : null;
+      const customConfig = customConfigStr
+        ? (JSON.parse(customConfigStr) as CustomModuleDefinition)
+        : null;
 
       // Get the position where the node was dropped
       const position = screenToFlowPosition({
@@ -174,6 +213,8 @@ const CanvasInner: React.FC = () => {
       // Get the label for this node type
       const moduleLabels: Record<NodeType, string> = {
         input: "Text Prompt Input",
+        sceneCollection: "Scene Collection",
+        sceneShotPlanner: "Scene Shot Planner",
         startFrame: "Start Frame",
         endFrame: "End Frame",
         continuityPlanner: "Continuity Planner",
@@ -206,7 +247,7 @@ const CanvasInner: React.FC = () => {
         }
       }
 
-      const newNode: any = {
+      const newNode: WorkflowNode = {
         id: `${type}-${Date.now()}`,
         type,
         position,
@@ -252,7 +293,7 @@ const CanvasInner: React.FC = () => {
   return (
     <div ref={reactFlowWrapper} className="w-full h-full">
       <ReactFlow
-        nodes={nodes as any}
+        nodes={nodes}
         edges={edgesWithSelection}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
@@ -262,7 +303,7 @@ const CanvasInner: React.FC = () => {
         onPaneClick={handlePaneClick}
         onDrop={onDrop}
         onDragOver={onDragOver}
-        nodeTypes={nodeTypes as any}
+        nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
         fitView
         className={isDarkMode ? "dark" : ""}
@@ -305,6 +346,10 @@ const CanvasInner: React.FC = () => {
             switch (node.data.type) {
               case "input":
                 return "#2563eb";
+              case "sceneCollection":
+                return "#d97706";
+              case "sceneShotPlanner":
+                return "#059669";
               case "startFrame":
               case "endFrame":
                 return "#16a34a";

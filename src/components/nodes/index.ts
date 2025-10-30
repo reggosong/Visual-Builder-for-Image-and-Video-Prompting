@@ -1,5 +1,7 @@
 export { InputNode } from "./InputNode";
+export { SceneCollectionNode } from "./SceneCollectionNode";
 export { StartFrameNode } from "./StartFrameNode";
+export { SceneShotPlannerNode } from "./SceneShotPlannerNode";
 export { EndFrameNode } from "./EndFrameNode";
 export { ContinuityPlannerNode } from "./ContinuityPlannerNode";
 export { ContextPromptNode } from "./ContextPromptNode";

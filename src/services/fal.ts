@@ -183,7 +183,7 @@ export async function generateImageWithReferences(
           return images.map((img) => img.url);
         }
       } catch (error) {
-        console.log("⚠️ Flux LoRA not available, trying alternative...");
+        console.log("⚠️ Flux LoRA not available, trying alternative...", error);
       }
     }
 

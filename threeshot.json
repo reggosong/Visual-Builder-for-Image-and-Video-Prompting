@@ -1,0 +1,1557 @@
+{
+  "version": "1.0.0",
+  "name": "Video Prompt Workflow",
+  "description": "Exported workflow",
+  "nodes": [
+    {
+      "id": "input-1",
+      "type": "input",
+      "position": {
+        "x": -564.25,
+        "y": 1030
+      },
+      "data": {
+        "label": "Master Scene Prompt",
+        "type": "input",
+        "prompt": "Medium close-up shot with a subtle slow push-in focusing intently on the protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan. She stands firmly in the stately White House Office, framed by dark wood paneling and heavy burgundy drapes with soft afternoon light filtering through a large window, casting gentle yet deliberate shadows that accentuate the tension and gravity of the moment. The protagonist locks eyes with Wilburn just off-camera, her chest slightly puffed out as she speaks with calm but resolute firmness, saying: No, Wilburn. The atmosphere is charged with a quiet strength and mounting tension, the ambient office sounds faint with the subtle rustle of papers and the soft creak of a leather chair in the background complementing her steady breathing. The lighting emphasizes warm natural tones highlighting the protagonist's determined expression, while the cinematic realism style captures the nuanced texture of her skin and the fine details of the setting. Audio: quiet ambient office noises, soft paper rustling, calm steady breathing, protagonist's voice calm but resolute. Cinematic realism style, 16:9 aspect ratio"
+      },
+      "measured": {
+        "width": 150,
+        "height": 263
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "char-1",
+      "type": "character",
+      "position": {
+        "x": 118,
+        "y": -511.5
+      },
+      "data": {
+        "label": "Shot 1 - Character Info",
+        "type": "character",
+        "extractedValue": [
+          "protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan",
+          "Wilburn"
+        ],
+        "isManual": false,
+        "isLoading": false
+      },
+      "measured": {
+        "width": 250,
+        "height": 218
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "variant-1",
+      "type": "variant",
+      "position": {
+        "x": 108,
+        "y": -260
+      },
+      "data": {
+        "label": "Shot 1 - Variants",
+        "type": "variant",
+        "extractedValue": [
+          "cinematic",
+          "realistic",
+          "photorealistic",
+          "naturalistic",
+          "dramatic realism"
+        ],
+        "isManual": false,
+        "isLoading": false
+      },
+      "measured": {
+        "width": 250,
+        "height": 356
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "shot-1",
+      "type": "shotInfo",
+      "position": {
+        "x": 44,
+        "y": 162
+      },
+      "data": {
+        "label": "Shot 1 - Shot Info",
+        "type": "shotInfo",
+        "extractedValue": {
+          "lighting": "soft afternoon natural light with gentle shadows",
+          "mood": "tense, defiant, resolute, charged with quiet strength",
+          "actions": "standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out",
+          "shotAngle": "eye level",
+          "cameraLens": "medium close-up",
+          "cameraMovement": "subtle slow push-in"
+        },
+        "isManual": false,
+        "manualOverrides": [],
+        "manualValues": {},
+        "isLoading": false
+      },
+      "measured": {
+        "width": 350,
+        "height": 392
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "context-1",
+      "type": "contextPrompt",
+      "position": {
+        "x": 544,
+        "y": -382
+      },
+      "data": {
+        "label": "Shot 1 Context Builder",
+        "type": "contextPrompt",
+        "template": "SHOT 1 - ESTABLISHING CLOSE-UP\n\nCharacter: {{characters}}\nVariants: {{variants}}\nLighting: {{lighting}}\nMood: {{mood}}\nCamera: {{cameraMovement}} {{shotAngle}} with {{cameraLens}}\nActions: {{actions}}\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.",
+        "preview": "SHOT 1 - ESTABLISHING CLOSE-UP\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.",
+        "inputs": {},
+        "availableVariables": [],
+        "isLoading": false
+      },
+      "measured": {
+        "width": 350,
+        "height": 652
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "start-1",
+      "type": "startFrame",
+      "position": {
+        "x": 1062,
+        "y": -661.25
+      },
+      "data": {
+        "label": "Shot 1 - Start Frame",
+        "type": "startFrame",
+        "extractedValue": "A photorealistic cinematic establishing shot of a middle-aged woman named Wilburn in a White House office, medium close-up at eye level. She has shoulder-length dark brown hair with visible gray streaks throughout, warm brown eyes radiating defiance and determination, a complexion showing subtle lines and weariness marks yet projecting resilience and strength. She wears a modest earth-toned blouse with a complementary natural-colored cardigan. She stands firmly with upright posture, chest slightly puffed out conveying confidence, her gaze locked intensely forward off-camera, facial expression calm yet firm, medium build with mature middle-aged features. The setting is a professional White House office interior with soft afternoon natural light streaming through windows creating gentle shadows across the scene. The lighting is warm and naturalistic, creating a tense yet resolute atmosphere. The composition captures her from chest up in medium close-up framing, shot at eye level with shallow depth of field, subtle vignetting. Dramatic realism style with muted color palette emphasizing earth tones, highly detailed facial features and fabric textures, professional government office environment visible but slightly out of focus in background. The mood is charged with quiet strength and determination. 8K resolution, cinematic color grading, natural skin tones, realistic lighting and shadows.",
+        "isManual": false,
+        "outputStartFrame": true,
+        "selectedCharacters": [],
+        "isLoading": false,
+        "generatedPrompt": "A photorealistic cinematic establishing shot of a middle-aged woman named Wilburn in a White House office, medium close-up at eye level. She has shoulder-length dark brown hair with visible gray streaks throughout, warm brown eyes radiating defiance and determination, a complexion showing subtle lines and weariness marks yet projecting resilience and strength. She wears a modest earth-toned blouse with a complementary natural-colored cardigan. She stands firmly with upright posture, chest slightly puffed out conveying confidence, her gaze locked intensely forward off-camera, facial expression calm yet firm, medium build with mature middle-aged features. The setting is a professional White House office interior with soft afternoon natural light streaming through windows creating gentle shadows across the scene. The lighting is warm and naturalistic, creating a tense yet resolute atmosphere. The composition captures her from chest up in medium close-up framing, shot at eye level with shallow depth of field, subtle vignetting. Dramatic realism style with muted color palette emphasizing earth tones, highly detailed facial features and fabric textures, professional government office environment visible but slightly out of focus in background. The mood is charged with quiet strength and determination. 8K resolution, cinematic color grading, natural skin tones, realistic lighting and shadows.",
+        "generatedImage": "https://v3b.fal.media/files/b/tiger/7xjyIttLEey5sFr7Bu1Us_51b516e419f3410fb838bb658769ee07.jpg",
+        "characterImages": [
+          {
+            "name": "Wilburn",
+            "url": "https://v3b.fal.media/files/b/kangaroo/xqdMbehCuJsnkNu1VlFWI.jpg",
+            "description": "A middle-aged woman with shoulder-length dark brown hair that has visible gray streaks running through it. She has warm brown eyes that convey defiance and determination. Her complexion shows signs of weariness with subtle lines and fatigue marks, yet projects an underlying resilience and strength. She is dressed in a modest earth-toned blouse paired with a cardigan in complementary natural colors. Her posture is firm and upright with her chest slightly puffed out, conveying confidence and resolve. Her facial expression is calm yet firm, with her gaze locked intensely forward. Her overall appearance suggests a woman who has endured hardship but maintains her dignity and determination. Medium build with mature features characteristic of middle age."
+          }
+        ]
+      },
+      "measured": {
+        "width": 350,
+        "height": 530
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "end-1",
+      "type": "endFrame",
+      "position": {
+        "x": 1096,
+        "y": 0
+      },
+      "data": {
+        "label": "Shot 1 - End Frame",
+        "type": "endFrame",
+        "extractedValue": "A cinematic end frame capturing the concluding moment of a dramatic confrontation in a White House office. Close-up composition showing a middle-aged woman with shoulder-length dark brown hair streaked with gray and warm brown eyes, dressed in a modest earth-toned blouse and cardigan. The camera has completed its slow push-in, now framing her face and upper torso in an intimate medium close-up at eye level. Her expression shows quiet triumph mixed with exhaustion—eyes locked forward with unwavering defiance, jaw set with determination, a subtle hint of satisfaction at the corners of her mouth. Her posture remains firm with chest slightly elevated, shoulders squared, conveying she has spoken her final word and will not waver. Soft afternoon natural light streams through unseen windows, creating gentle shadows that define her weathered but resilient features, with golden-hour warmth giving her gray-streaked hair luminous highlights. The shallow depth of field keeps her face in razor-sharp focus while the White House office background—wooden paneling, American flags, official seals—falls into a soft bokeh blur of warm browns, deep blues, and muted golds. The lighting creates a subtle rim light along her profile, separating her from the background with an almost ethereal glow. The atmosphere is heavy with tension but resolution, the charged air of a pivotal moment concluded. Photorealistic cinematic quality with film grain texture, captured as if shot on 35mm with a portrait lens, color graded with rich earth tones and warm shadows. The frame embodies closure, strength, and the weight of words spoken, frozen in the final second before the scene fades to black. High quality, dramatic realism, 8K resolution, naturalistic skin texture, professional cinematography.",
+        "isManual": false,
+        "isLoading": false,
+        "generatedPrompt": "A cinematic end frame capturing the concluding moment of a dramatic confrontation in a White House office. Close-up composition showing a middle-aged woman with shoulder-length dark brown hair streaked with gray and warm brown eyes, dressed in a modest earth-toned blouse and cardigan. The camera has completed its slow push-in, now framing her face and upper torso in an intimate medium close-up at eye level. Her expression shows quiet triumph mixed with exhaustion—eyes locked forward with unwavering defiance, jaw set with determination, a subtle hint of satisfaction at the corners of her mouth. Her posture remains firm with chest slightly elevated, shoulders squared, conveying she has spoken her final word and will not waver. Soft afternoon natural light streams through unseen windows, creating gentle shadows that define her weathered but resilient features, with golden-hour warmth giving her gray-streaked hair luminous highlights. The shallow depth of field keeps her face in razor-sharp focus while the White House office background—wooden paneling, American flags, official seals—falls into a soft bokeh blur of warm browns, deep blues, and muted golds. The lighting creates a subtle rim light along her profile, separating her from the background with an almost ethereal glow. The atmosphere is heavy with tension but resolution, the charged air of a pivotal moment concluded. Photorealistic cinematic quality with film grain texture, captured as if shot on 35mm with a portrait lens, color graded with rich earth tones and warm shadows. The frame embodies closure, strength, and the weight of words spoken, frozen in the final second before the scene fades to black. High quality, dramatic realism, 8K resolution, naturalistic skin texture, professional cinematography.",
+        "generatedImage": "https://v3b.fal.media/files/b/panda/MlFQyYUn_4MFYr_3RkuMy.jpg",
+        "variantImages": [
+          {
+            "name": "Painterly Renaissance",
+            "url": "https://v3b.fal.media/files/b/kangaroo/2fb8EGRLBsgF1o-0HP1IL.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame transforms into a classical oil painting aesthetic reminiscent of Rembrandt or Caravaggio. Deep chiaroscuro lighting bathes the protagonist in a dramatic shaft of golden light from an unseen window, creating rich amber and burnt sienna tones. Her face is illuminated with masterful contrast while shadows pool dramatically around her shoulders. The background fades into deep umber and black, with barely visible architectural details of the White House office rendered in loose, impressionistic brushstrokes. Her gray-streaked hair catches highlights like silver threads, and her expression is frozen in a timeless moment of dignity, as if captured for a portrait that would hang in a museum gallery.. Based on this video concept: SHOT 1 - ESTABLISHING CLOSE-UP\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.. High quality, cinematic composition, photorealistic style."
+          },
+          {
+            "name": "Shattered Prism",
+            "url": "https://v3b.fal.media/files/b/kangaroo/_DfgEFpCfKgRfYSJHPwBg.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame fractures into a kaleidoscopic crystalline composition where the protagonist's resolute face is refracted through geometric glass-like fragments. Each shard shows her from slightly different angles and moments in time, creating a cubist-inspired mosaic. The earth tones of her clothing splinter into prismatic variations—warm ochres blend into cool grays, cardigan browns disperse into golden amber and deep burgundy. Thin lines of brilliant white light trace the edges of each fragment like cracks in reality. Her eyes remain the focal point, appearing multiple times throughout the composition, all converging on the same determined gaze, symbolizing her multifaceted strength and unwavering resolve despite life's fractures.. Based on this video concept: SHOT 1 - ESTABLISHING CLOSE-UP\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.. High quality, cinematic composition, photorealistic style."
+          },
+          {
+            "name": "Ethereal Dissolve",
+            "url": "https://v3b.fal.media/files/b/zebra/h5qAt77I1QLlCiyXYe5-Z.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame transitions into a dreamlike double-exposure effect where the protagonist's solid, defiant form begins to merge with swirling particles of light and shadow. Her figure maintains sharp focus at the center, but the edges of her silhouette dissolve into luminous wisps and tendrils of soft golden and silver mist. The White House office behind her becomes abstract—wooden panels and presidential seals transform into watercolor washes of cream, taupe, and dusty blue. Floating particles of light, like illuminated dust motes or fireflies, drift across the frame, creating a sense of temporal transcendence. Her determined expression remains crystal clear, a beacon of certainty amid the ephemeral surroundings, suggesting her inner strength is eternal while the political setting is transient.. Based on this video concept: SHOT 1 - ESTABLISHING CLOSE-UP\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.. High quality, cinematic composition, photorealistic style."
+          }
+        ]
+      },
+      "measured": {
+        "width": 350,
+        "height": 468
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "char-2",
+      "type": "character",
+      "position": {
+        "x": 42,
+        "y": 578
+      },
+      "data": {
+        "label": "Shot 2 - Character Info",
+        "type": "character",
+        "extractedValue": [
+          "protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan",
+          "Wilburn"
+        ],
+        "isManual": false,
+        "isLoading": false
+      },
+      "measured": {
+        "width": 250,
+        "height": 218
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "variant-2",
+      "type": "variant",
+      "position": {
+        "x": 40,
+        "y": 810
+      },
+      "data": {
+        "label": "Shot 2 - Variants",
+        "type": "variant",
+        "extractedValue": [
+          "cinematic",
+          "realistic",
+          "photorealistic",
+          "naturalistic",
+          "dramatic lighting",
+          "cinematic realism"
+        ],
+        "isManual": false,
+        "isLoading": false
+      },
+      "measured": {
+        "width": 250,
+        "height": 402
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "shot-2",
+      "type": "shotInfo",
+      "position": {
+        "x": -22,
+        "y": 1240
+      },
+      "data": {
+        "label": "Shot 2 - Shot Info",
+        "type": "shotInfo",
+        "extractedValue": {
+          "lighting": "soft afternoon natural light with gentle shadows",
+          "mood": "tense, defiant, resolute, charged with quiet strength",
+          "actions": "standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out",
+          "shotAngle": "medium close-up, eye level",
+          "cameraLens": "medium focal length",
+          "cameraMovement": "subtle slow push-in"
+        },
+        "isManual": false,
+        "manualOverrides": [],
+        "manualValues": {},
+        "isLoading": false
+      },
+      "measured": {
+        "width": 350,
+        "height": 392
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "context-2",
+      "type": "contextPrompt",
+      "position": {
+        "x": 466,
+        "y": 652
+      },
+      "data": {
+        "label": "Shot 2 Context Builder",
+        "type": "contextPrompt",
+        "template": "SHOT 2 - REACTION & DIALOGUE\n\nCharacter: {{characters}}\nVariants: {{variants}}\nLighting: {{lighting}}\nMood: {{mood}}\nCamera: {{cameraMovement}} {{shotAngle}} with {{cameraLens}}\nActions: {{actions}}\n\nContinuing from Shot 1, this captures the protagonist's powerful moment of speaking 'No, Wilburn' with unwavering conviction. The camera pushes in slightly to emphasize her emotional intensity.",
+        "preview": "SHOT 2 - REACTION & DIALOGUE\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic lighting, cinematic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in medium close-up, eye level with medium focal length\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nContinuing from Shot 1, this captures the protagonist's powerful moment of speaking 'No, Wilburn' with unwavering conviction. The camera pushes in slightly to emphasize her emotional intensity.",
+        "inputs": {},
+        "availableVariables": [],
+        "isLoading": false
+      },
+      "measured": {
+        "width": 350,
+        "height": 732
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "start-2",
+      "type": "startFrame",
+      "position": {
+        "x": 980,
+        "y": 494
+      },
+      "data": {
+        "label": "Shot 2 - Start Frame",
+        "type": "startFrame",
+        "extractedValue": "A photorealistic cinematic medium close-up shot at eye level of a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, standing firmly in an interior domestic setting. She is positioned slightly off-center in the frame, her body squared to face someone off-camera, chest slightly puffed out showing quiet strength and determination. Her facial expression conveys calm firmness and unwavering conviction as she maintains direct eye contact with the off-camera character named Wilburn. Her lips are parted as if about to speak or just beginning to speak. Soft afternoon natural light streams through nearby windows creating gentle shadows across her face and figure, illuminating the warm tones of her clothing and highlighting the gray streaks in her hair. The background shows a modest, lived-in home interior with neutral earth tones, slightly out of focus. The lighting is warm and naturalistic with dramatic undertones. The composition captures the initial moment of tense confrontation with charged atmosphere. Shot with medium focal length, shallow depth of field, cinematic realism style, naturalistic color grading, professional cinematography, establishing the emotional intensity of the scene.",
+        "isManual": false,
+        "outputStartFrame": false,
+        "selectedCharacters": ["Protagonist"],
+        "isLoading": false,
+        "generatedPrompt": "A photorealistic cinematic medium close-up shot at eye level of a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, standing firmly in an interior domestic setting. She is positioned slightly off-center in the frame, her body squared to face someone off-camera, chest slightly puffed out showing quiet strength and determination. Her facial expression conveys calm firmness and unwavering conviction as she maintains direct eye contact with the off-camera character named Wilburn. Her lips are parted as if about to speak or just beginning to speak. Soft afternoon natural light streams through nearby windows creating gentle shadows across her face and figure, illuminating the warm tones of her clothing and highlighting the gray streaks in her hair. The background shows a modest, lived-in home interior with neutral earth tones, slightly out of focus. The lighting is warm and naturalistic with dramatic undertones. The composition captures the initial moment of tense confrontation with charged atmosphere. Shot with medium focal length, shallow depth of field, cinematic realism style, naturalistic color grading, professional cinematography, establishing the emotional intensity of the scene.",
+        "generatedImage": "https://v3b.fal.media/files/b/elephant/9UKg7FWzlG4w0ZaAsYQpq_769fd8eed078402486e80bcc3841f965.jpg",
+        "characterImages": [
+          {
+            "name": "Protagonist",
+            "url": "https://v3b.fal.media/files/b/koala/ukJ0kv54zCAkjYCFwXVlC.jpg",
+            "description": "A middle-aged woman with shoulder-length dark brown hair streaked with gray. She has warm brown eyes filled with defiance and a complexion marked by weariness yet resilience. She is dressed in a modest earth-toned blouse and cardigan. Her demeanor shows quiet strength and determination, with her chest slightly puffed out as she stands firmly. Her facial expression conveys calm firmness and unwavering conviction as she maintains direct eye contact."
+          },
+          {
+            "name": "Wilburn",
+            "url": "https://v3b.fal.media/files/b/zebra/ZEij31wbJy7T7BJ0xpq49.jpg",
+            "description": "Character is off-camera and not visually described in this shot. Referenced only by name as the person being addressed by the protagonist."
+          }
+        ]
+      },
+      "measured": {
+        "width": 350,
+        "height": 530
+      },
+      "selected": true,
+      "dragging": false
+    },
+    {
+      "id": "end-2",
+      "type": "endFrame",
+      "position": {
+        "x": 982,
+        "y": 1052
+      },
+      "data": {
+        "label": "Shot 2 - End Frame",
+        "type": "endFrame",
+        "extractedValue": "Cinematic photorealistic end frame of a middle-aged woman in tight medium close-up, final moment of defiant resolution. Eye-level perspective, 85mm focal length equivalent creating shallow depth of field. Subject positioned center frame with slight offset, her shoulder-length dark brown hair streaked with silver-gray falling naturally around her weathered yet determined face. Warm brown eyes locked in direct, unwavering gaze toward camera left, pupils slightly dilated with intensity. Her jaw is set firm, mouth just closed after speaking final word, hint of breath visible. Complexion shows fine lines of age and weariness, yet radiates quiet strength and dignity. Wearing modest earth-toned blouse in warm taupe beneath a soft cardigan in muted sage green. Chest elevated, shoulders squared, posture conveying unshakable conviction. Soft afternoon natural light streams from window right, creating gentle Rembrandt lighting with subtle shadows defining facial contours, catchlight in eyes. Warm golden hour color temperature, highlights in hair showing dimensional texture. Background softly blurred into abstract warm ochres and muted browns suggesting domestic interior. Slight film grain texture, cinematic color grading with lifted blacks and warm midtones. Vignette subtly darkened at edges drawing focus to her face. Atmosphere thick with emotional weight and finality. Perfect focus on eyes and expression, capturing the exact moment of powerful refusal, the conclusive punctuation of her statement. Anamorphic aspect ratio 2.39:1, Netflix prestige drama cinematography, ARRI Alexa LF aesthetic, resolved and complete composition radiating quiet triumph.",
+        "isManual": false,
+        "isLoading": false,
+        "generatedPrompt": "Cinematic photorealistic end frame of a middle-aged woman in tight medium close-up, final moment of defiant resolution. Eye-level perspective, 85mm focal length equivalent creating shallow depth of field. Subject positioned center frame with slight offset, her shoulder-length dark brown hair streaked with silver-gray falling naturally around her weathered yet determined face. Warm brown eyes locked in direct, unwavering gaze toward camera left, pupils slightly dilated with intensity. Her jaw is set firm, mouth just closed after speaking final word, hint of breath visible. Complexion shows fine lines of age and weariness, yet radiates quiet strength and dignity. Wearing modest earth-toned blouse in warm taupe beneath a soft cardigan in muted sage green. Chest elevated, shoulders squared, posture conveying unshakable conviction. Soft afternoon natural light streams from window right, creating gentle Rembrandt lighting with subtle shadows defining facial contours, catchlight in eyes. Warm golden hour color temperature, highlights in hair showing dimensional texture. Background softly blurred into abstract warm ochres and muted browns suggesting domestic interior. Slight film grain texture, cinematic color grading with lifted blacks and warm midtones. Vignette subtly darkened at edges drawing focus to her face. Atmosphere thick with emotional weight and finality. Perfect focus on eyes and expression, capturing the exact moment of powerful refusal, the conclusive punctuation of her statement. Anamorphic aspect ratio 2.39:1, Netflix prestige drama cinematography, ARRI Alexa LF aesthetic, resolved and complete composition radiating quiet triumph.",
+        "generatedImage": "https://v3b.fal.media/files/b/monkey/0D2D1wkYPSXb9LPyDVo2G.jpg",
+        "variantImages": [
+          {
+            "name": "Painterly Impressionist",
+            "url": "https://v3b.fal.media/files/b/monkey/2HzGGDIFsommJpPywkMs6.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. Transform the final frame into a living oil painting with visible brushstroke textures throughout. The protagonist's face becomes the focal point with sharp, deliberate strokes defining her features, while the background dissolves into soft, blurred washes of warm ochres, burnt siennas, and muted greens. Her gray-streaked hair catches light with thick impasto highlights in cream and silver. The edges of the frame fade into abstract color fields, creating a vignette effect. Her brown eyes remain intensely rendered with fine detail contrasting against the looser painterly treatment of her clothing and surroundings, evoking the emotional intensity of a Rembrandt portrait combined with impressionist color theory.. Based on this video concept: SHOT 2 - REACTION & DIALOGUE\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic lighting, cinematic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in medium close-up, eye level with medium focal length\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nContinuing from Shot 1, this captures the protagonist's powerful moment of speaking 'No, Wilburn' with unwavering conviction. The camera pushes in slightly to emphasize her emotional intensity.. High quality, cinematic composition, photorealistic style."
+          },
+          {
+            "name": "Ethereal Light Leak",
+            "url": "https://v3b.fal.media/files/b/tiger/SXKontT7suO6GNJRyB6RW.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame is suffused with dreamy, prismatic light leaks that arc across the image from the upper right corner, creating soft rainbow halos and golden flares that partially obscure the scene. The protagonist appears almost angelic, backlit with a gentle rim light that creates a luminous glow around her silhouette and hair. The realistic details soften slightly, with highlights blown out to create an otherworldly, transcendent quality. Her defiant expression cuts through the ethereal atmosphere, grounding the moment in raw emotion. Film grain and subtle chromatic aberration enhance the analog, nostalgic feeling, as if this decisive moment is being remembered through a filter of time and significance.. Based on this video concept: SHOT 2 - REACTION & DIALOGUE\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic lighting, cinematic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in medium close-up, eye level with medium focal length\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nContinuing from Shot 1, this captures the protagonist's powerful moment of speaking 'No, Wilburn' with unwavering conviction. The camera pushes in slightly to emphasize her emotional intensity.. High quality, cinematic composition, photorealistic style."
+          },
+          {
+            "name": "Stark Graphic Novel",
+            "url": "https://v3b.fal.media/files/b/elephant/Njk3HK7bCpVzazep0lqfs.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame transforms into a high-contrast, stylized graphic novel illustration with bold ink-like linework and strategic use of solid black shadows. The protagonist's features are defined by confident, expressive contour lines with heavy black shadows under her chin, cheekbones, and eye sockets that emphasize her determination. Limited color palette of deep earth tones, rich browns, and selective pops of warm amber for her eyes. Hatching and cross-hatching techniques add texture to her cardigan and hair. The background simplifies into abstract geometric shapes and solid color blocks. Small motion lines or emphasis marks radiate subtly from her figure, amplifying the charged atmosphere of her refusal, reminiscent of contemporary graphic memoir aesthetics.. Based on this video concept: SHOT 2 - REACTION & DIALOGUE\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic lighting, cinematic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in medium close-up, eye level with medium focal length\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nContinuing from Shot 1, this captures the protagonist's powerful moment of speaking 'No, Wilburn' with unwavering conviction. The camera pushes in slightly to emphasize her emotional intensity.. High quality, cinematic composition, photorealistic style."
+          }
+        ]
+      },
+      "measured": {
+        "width": 350,
+        "height": 468
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "char-3",
+      "type": "character",
+      "position": {
+        "x": 108,
+        "y": 1654
+      },
+      "data": {
+        "label": "Shot 3 - Character Info",
+        "type": "character",
+        "extractedValue": [
+          "protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan",
+          "Wilburn"
+        ],
+        "isManual": false,
+        "isLoading": false
+      },
+      "measured": {
+        "width": 250,
+        "height": 218
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "variant-3",
+      "type": "variant",
+      "position": {
+        "x": -50,
+        "y": 1886
+      },
+      "data": {
+        "label": "Shot 3 - Variants",
+        "type": "variant",
+        "extractedValue": [
+          "cinematic",
+          "realism",
+          "photorealistic",
+          "naturalistic",
+          "dramatic",
+          "atmospheric"
+        ],
+        "isManual": false,
+        "isLoading": false
+      },
+      "measured": {
+        "width": 250,
+        "height": 402
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "shot-3",
+      "type": "shotInfo",
+      "position": {
+        "x": -104,
+        "y": 2378
+      },
+      "data": {
+        "label": "Shot 3 - Shot Info",
+        "type": "shotInfo",
+        "extractedValue": {
+          "lighting": "soft afternoon natural light with gentle shadows",
+          "mood": "tense, defiant, resolute, charged with quiet strength",
+          "actions": "standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out",
+          "shotAngle": "eye level",
+          "cameraLens": "medium close-up",
+          "cameraMovement": "subtle slow push-in"
+        },
+        "isManual": false,
+        "manualOverrides": [],
+        "manualValues": {},
+        "isLoading": false
+      },
+      "measured": {
+        "width": 350,
+        "height": 392
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "context-3",
+      "type": "contextPrompt",
+      "position": {
+        "x": 542,
+        "y": 1430
+      },
+      "data": {
+        "label": "Shot 3 Context Builder",
+        "type": "contextPrompt",
+        "template": "SHOT 3 - AFTERMATH & RESOLVE\n\nCharacter: {{characters}}\nVariants: {{variants}}\nLighting: {{lighting}}\nMood: {{mood}}\nCamera: {{cameraMovement}} {{shotAngle}} with {{cameraLens}}\nActions: {{actions}}\n\nThe final shot in the sequence shows the lasting impact of her words. The atmosphere remains charged with quiet strength as she maintains her position, the afternoon light continuing to cast purposeful shadows in the office.",
+        "preview": "SHOT 3 - AFTERMATH & RESOLVE\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realism, photorealistic, naturalistic, dramatic, atmospheric\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThe final shot in the sequence shows the lasting impact of her words. The atmosphere remains charged with quiet strength as she maintains her position, the afternoon light continuing to cast purposeful shadows in the office.",
+        "inputs": {},
+        "availableVariables": [],
+        "isLoading": false
+      },
+      "measured": {
+        "width": 350,
+        "height": 692
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "start-3",
+      "type": "startFrame",
+      "position": {
+        "x": 970,
+        "y": 1536
+      },
+      "data": {
+        "label": "Shot 3 - Start Frame",
+        "type": "startFrame",
+        "extractedValue": "Cinematic photorealistic establishing shot of a tense office interior bathed in soft afternoon natural light streaming through windows, creating gentle shadows across the room. Medium close-up composition at eye level showing Wilburn, a middle-aged woman with shoulder-length dark brown hair featuring natural gray streaks, warm brown eyes filled with defiance and inner strength, mature facial features showing life experience with a determined expression, wearing a modest earth-toned blouse in beige or tan paired with a complementary cardigan in muted brown or natural colors. She stands firmly with confident posture, chest slightly puffed out, average build neither tall nor short, positioned centrally in frame beginning to lock eyes with someone off-camera, her body language radiating quiet strength and resolve. The office setting features naturalistic details with warm wood tones and muted colors, atmospheric lighting casting purposeful shadows that enhance the dramatic tension. Shot on high-end cinema camera with shallow depth of field, naturalistic color grading with earth tones dominating the palette, realism style with attention to fabric textures and environmental details, charged atmosphere of defiance and determination, 4K cinematic quality, professional dramatic lighting setup mimicking natural afternoon sun.",
+        "isManual": false,
+        "outputStartFrame": true,
+        "selectedCharacters": [],
+        "isLoading": false,
+        "generatedPrompt": "Cinematic photorealistic establishing shot of a tense office interior bathed in soft afternoon natural light streaming through windows, creating gentle shadows across the room. Medium close-up composition at eye level showing Wilburn, a middle-aged woman with shoulder-length dark brown hair featuring natural gray streaks, warm brown eyes filled with defiance and inner strength, mature facial features showing life experience with a determined expression, wearing a modest earth-toned blouse in beige or tan paired with a complementary cardigan in muted brown or natural colors. She stands firmly with confident posture, chest slightly puffed out, average build neither tall nor short, positioned centrally in frame beginning to lock eyes with someone off-camera, her body language radiating quiet strength and resolve. The office setting features naturalistic details with warm wood tones and muted colors, atmospheric lighting casting purposeful shadows that enhance the dramatic tension. Shot on high-end cinema camera with shallow depth of field, naturalistic color grading with earth tones dominating the palette, realism style with attention to fabric textures and environmental details, charged atmosphere of defiance and determination, 4K cinematic quality, professional dramatic lighting setup mimicking natural afternoon sun.",
+        "generatedImage": "https://v3b.fal.media/files/b/lion/jtvuO8j_oq1aLvHv8CU-k_35fb6d6869134ad098e32c8aa01f372d.jpg",
+        "characterImages": [
+          {
+            "name": "Wilburn",
+            "url": "https://v3b.fal.media/files/b/tiger/rNGWq2Cdec1DbSZ2MNrAx.jpg",
+            "description": "Middle-aged woman with shoulder-length dark brown hair that has natural gray streaks running through it. She has warm brown eyes that convey a sense of defiance and inner strength. Her facial features suggest maturity and life experience, with a determined expression. She wears a modest earth-toned blouse paired with a cardigan in complementary natural colors like beige, tan, or muted brown. Her posture is firm and confident with her chest slightly puffed out, standing at eye level to the camera. Her overall appearance is naturalistic and realistic, dressed in simple, unpretentious clothing that reflects a grounded, practical personality. Her build appears average for a woman of middle age, neither particularly tall nor short, with a presence that commands respect through quiet strength rather than physical imposing stature."
+          }
+        ]
+      },
+      "measured": {
+        "width": 350,
+        "height": 530
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "end-3",
+      "type": "endFrame",
+      "position": {
+        "x": 968,
+        "y": 2072
+      },
+      "data": {
+        "label": "Shot 3 - End Frame",
+        "type": "endFrame",
+        "extractedValue": "A cinematic end frame / final shot for a video sequence. Medium close-up at eye level of Wilburn, a middle-aged woman with shoulder-length dark brown hair streaked with gray and warm brown eyes burning with quiet defiance, wearing a modest earth-toned blouse and cardigan. She stands firmly in place, her posture resolute with chest slightly puffed out, maintaining unwavering eye contact with an off-camera presence. Her lips are just finishing their final words, caught in a moment of calm firmness. Soft afternoon natural light streams through office windows, casting purposeful, gentle shadows across her face and the surrounding space, creating dimension and depth. The atmosphere is heavy with the lasting impact of her spoken truth - the air itself seems charged with quiet strength and tension. The background office environment is slightly softened with shallow depth of field, keeping all focus on her powerful presence. Dust particles float subtly in the light beams. Her expression captures the resolution and aftermath of confrontation - defiant yet composed, tired yet triumphant, vulnerable yet unbreakable. The lighting creates a natural vignette effect, drawing the eye to her face and eyes which reflect both exhaustion and inner fire. The frame holds this final moment, allowing the weight of her words and presence to resonate. Photorealistic, naturalistic, cinematic composition with dramatic atmospheric tension, film grain texture, muted color palette emphasizing earth tones and warm browns, high quality 4K resolution, shot on cinema camera with shallow depth of field, professional color grading.",
+        "isManual": false,
+        "isLoading": false,
+        "generatedPrompt": "A cinematic end frame / final shot for a video sequence. Medium close-up at eye level of Wilburn, a middle-aged woman with shoulder-length dark brown hair streaked with gray and warm brown eyes burning with quiet defiance, wearing a modest earth-toned blouse and cardigan. She stands firmly in place, her posture resolute with chest slightly puffed out, maintaining unwavering eye contact with an off-camera presence. Her lips are just finishing their final words, caught in a moment of calm firmness. Soft afternoon natural light streams through office windows, casting purposeful, gentle shadows across her face and the surrounding space, creating dimension and depth. The atmosphere is heavy with the lasting impact of her spoken truth - the air itself seems charged with quiet strength and tension. The background office environment is slightly softened with shallow depth of field, keeping all focus on her powerful presence. Dust particles float subtly in the light beams. Her expression captures the resolution and aftermath of confrontation - defiant yet composed, tired yet triumphant, vulnerable yet unbreakable. The lighting creates a natural vignette effect, drawing the eye to her face and eyes which reflect both exhaustion and inner fire. The frame holds this final moment, allowing the weight of her words and presence to resonate. Photorealistic, naturalistic, cinematic composition with dramatic atmospheric tension, film grain texture, muted color palette emphasizing earth tones and warm browns, high quality 4K resolution, shot on cinema camera with shallow depth of field, professional color grading.",
+        "generatedImage": "https://v3b.fal.media/files/b/lion/u-ySGPruyHpmjdbu_5NNS.jpg",
+        "variantImages": [
+          {
+            "name": "Ethereal Light Halo",
+            "url": "https://v3b.fal.media/files/b/koala/L95m9cz4PBq7BJ6cehQdG.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame bathes Wilburn in a divine-like rim light as the afternoon sun creates a luminous halo around her silhouette. Her face is half in shadow, half illuminated, creating a striking chiaroscuro effect that emphasizes her moral righteousness. The background softly blurs into a dreamy bokeh of warm amber and honey tones, with visible dust particles floating in the light beams, giving her an almost mythological presence. Her eyes catch a sharp glint of light, making them appear to glow with inner fire and determination.. Based on this video concept: SHOT 3 - AFTERMATH & RESOLVE\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realism, photorealistic, naturalistic, dramatic, atmospheric\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThe final shot in the sequence shows the lasting impact of her words. The atmosphere remains charged with quiet strength as she maintains her position, the afternoon light continuing to cast purposeful shadows in the office.. High quality, cinematic composition, photorealistic style."
+          },
+          {
+            "name": "Desaturated Power Portrait",
+            "url": "https://v3b.fal.media/files/b/rabbit/MGNeUrMOteId0b_CiynPf.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame shifts to a nearly monochromatic palette with heavily desaturated colors, maintaining only subtle hints of her earth-toned clothing and a faint warmth in her brown eyes. The image takes on a documentary-style aesthetic with increased contrast and grain texture, making it feel raw and unpolished. Sharp focus on her face while the background office elements become increasingly abstract and blurred. The muted color scheme emphasizes the weight and gravity of the moment, stripping away distraction to focus purely on her expression of quiet defiance and the lines of experience in her face.. Based on this video concept: SHOT 3 - AFTERMATH & RESOLVE\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realism, photorealistic, naturalistic, dramatic, atmospheric\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThe final shot in the sequence shows the lasting impact of her words. The atmosphere remains charged with quiet strength as she maintains her position, the afternoon light continuing to cast purposeful shadows in the office.. High quality, cinematic composition, photorealistic style."
+          },
+          {
+            "name": "Golden Hour Triumph",
+            "url": "https://v3b.fal.media/files/b/zebra/WzQmBTLD99Dc-qoIUQ4JB.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame explodes with rich, saturated golden-hour warmth as if the sun has suddenly broken through clouds. Her brown hair catches copper and auburn highlights, the gray streaks shimmer like silver threads. The entire scene is bathed in a vibrant orange-gold glow that creates a sense of victory and transformation. Lens flares subtly appear at the edges of the frame, and the depth of field becomes shallower, with her face in crisp focus against a creamy, luminous background. The warm light wraps around her figure, creating an empowering, almost cinematic hero-shot quality that celebrates her strength and resolve.. Based on this video concept: SHOT 3 - AFTERMATH & RESOLVE\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realism, photorealistic, naturalistic, dramatic, atmospheric\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThe final shot in the sequence shows the lasting impact of her words. The atmosphere remains charged with quiet strength as she maintains her position, the afternoon light continuing to cast purposeful shadows in the office.. High quality, cinematic composition, photorealistic style."
+          }
+        ]
+      },
+      "measured": {
+        "width": 350,
+        "height": 468
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "output-1",
+      "type": "output",
+      "position": {
+        "x": 1611.8184100921637,
+        "y": -248
+      },
+      "data": {
+        "label": "Shot 1 Output",
+        "type": "output",
+        "finalPrompt": "Prompt: A photorealistic cinematic establishing shot of a middle-aged woman named Wilburn in a White House office, medium close-up at eye level. She has shoulder-length dark brown hair with visible gray streaks throughout, warm brown eyes radiating defiance and determination, a complexion showing subtle lines and weariness marks yet projecting resilience and strength. She wears a modest earth-toned blouse with a complementary natural-colored cardigan. She stands firmly with upright posture, chest slightly puffed out conveying confidence, her gaze locked intensely forward off-camera, facial expression calm yet firm, medium build with mature middle-aged features. The setting is a professional White House office interior with soft afternoon natural light streaming through windows creating gentle shadows across the scene. The lighting is warm and naturalistic, creating a tense yet resolute atmosphere. The composition captures her from chest up in medium close-up framing, shot at eye level with shallow depth of field, subtle vignetting. Dramatic realism style with muted color palette emphasizing earth tones, highly detailed facial features and fabric textures, professional government office environment visible but slightly out of focus in background. The mood is charged with quiet strength and determination. 8K resolution, cinematic color grading, natural skin tones, realistic lighting and shadows.\n\n---\n\nImage: https://v3b.fal.media/files/b/tiger/7xjyIttLEey5sFr7Bu1Us_51b516e419f3410fb838bb658769ee07.jpg\n\n---\n\nCharacters:\nWilburn: https://v3b.fal.media/files/b/kangaroo/xqdMbehCuJsnkNu1VlFWI.jpg\n\n---\n\nSHOT 1 - ESTABLISHING CLOSE-UP\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.\n\n---\n\nPrompt: A cinematic end frame capturing the concluding moment of a dramatic confrontation in a White House office. Close-up composition showing a middle-aged woman with shoulder-length dark brown hair streaked with gray and warm brown eyes, dressed in a modest earth-toned blouse and cardigan. The camera has completed its slow push-in, now framing her face and upper torso in an intimate medium close-up at eye level. Her expression shows quiet triumph mixed with exhaustion—eyes locked forward with unwavering defiance, jaw set with determination, a subtle hint of satisfaction at the corners of her mouth. Her posture remains firm with chest slightly elevated, shoulders squared, conveying she has spoken her final word and will not waver. Soft afternoon natural light streams through unseen windows, creating gentle shadows that define her weathered but resilient features, with golden-hour warmth giving her gray-streaked hair luminous highlights. The shallow depth of field keeps her face in razor-sharp focus while the White House office background—wooden paneling, American flags, official seals—falls into a soft bokeh blur of warm browns, deep blues, and muted golds. The lighting creates a subtle rim light along her profile, separating her from the background with an almost ethereal glow. The atmosphere is heavy with tension but resolution, the charged air of a pivotal moment concluded. Photorealistic cinematic quality with film grain texture, captured as if shot on 35mm with a portrait lens, color graded with rich earth tones and warm shadows. The frame embodies closure, strength, and the weight of words spoken, frozen in the final second before the scene fades to black. High quality, dramatic realism, 8K resolution, naturalistic skin texture, professional cinematography.\n\n---\n\nImage: https://v3b.fal.media/files/b/panda/MlFQyYUn_4MFYr_3RkuMy.jpg\n\n---\n\nVariants:\nPainterly Renaissance: https://v3b.fal.media/files/b/kangaroo/2fb8EGRLBsgF1o-0HP1IL.jpg\nShattered Prism: https://v3b.fal.media/files/b/kangaroo/_DfgEFpCfKgRfYSJHPwBg.jpg\nEthereal Dissolve: https://v3b.fal.media/files/b/zebra/h5qAt77I1QLlCiyXYe5-Z.jpg",
+        "isLoading": false
+      },
+      "measured": {
+        "width": 150,
+        "height": 394
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "output-2",
+      "type": "output",
+      "position": {
+        "x": 1404,
+        "y": 690
+      },
+      "data": {
+        "label": "Shot 2 Output",
+        "type": "output",
+        "finalPrompt": "SHOT 2 - REACTION & DIALOGUE\n\nCharacter: protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic, naturalistic, dramatic lighting, cinematic realism\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in medium close-up, eye level with medium focal length\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nContinuing from Shot 1, this captures the protagonist's powerful moment of speaking 'No, Wilburn' with unwavering conviction. The camera pushes in slightly to emphasize her emotional intensity.\n\n---\n\nPrompt: A photorealistic cinematic medium close-up shot at eye level of a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan, standing firmly in an interior domestic setting. She is positioned slightly off-center in the frame, her body squared to face someone off-camera, chest slightly puffed out showing quiet strength and determination. Her facial expression conveys calm firmness and unwavering conviction as she maintains direct eye contact with the off-camera character named Wilburn. Her lips are parted as if about to speak or just beginning to speak. Soft afternoon natural light streams through nearby windows creating gentle shadows across her face and figure, illuminating the warm tones of her clothing and highlighting the gray streaks in her hair. The background shows a modest, lived-in home interior with neutral earth tones, slightly out of focus. The lighting is warm and naturalistic with dramatic undertones. The composition captures the initial moment of tense confrontation with charged atmosphere. Shot with medium focal length, shallow depth of field, cinematic realism style, naturalistic color grading, professional cinematography, establishing the emotional intensity of the scene.\n\n---\n\nImage: https://v3b.fal.media/files/b/elephant/9UKg7FWzlG4w0ZaAsYQpq_769fd8eed078402486e80bcc3841f965.jpg\n\n---\n\nCharacters:\nProtagonist: https://v3b.fal.media/files/b/koala/ukJ0kv54zCAkjYCFwXVlC.jpg\nWilburn: https://v3b.fal.media/files/b/zebra/ZEij31wbJy7T7BJ0xpq49.jpg\n\n---\n\nPrompt: Cinematic photorealistic end frame of a middle-aged woman in tight medium close-up, final moment of defiant resolution. Eye-level perspective, 85mm focal length equivalent creating shallow depth of field. Subject positioned center frame with slight offset, her shoulder-length dark brown hair streaked with silver-gray falling naturally around her weathered yet determined face. Warm brown eyes locked in direct, unwavering gaze toward camera left, pupils slightly dilated with intensity. Her jaw is set firm, mouth just closed after speaking final word, hint of breath visible. Complexion shows fine lines of age and weariness, yet radiates quiet strength and dignity. Wearing modest earth-toned blouse in warm taupe beneath a soft cardigan in muted sage green. Chest elevated, shoulders squared, posture conveying unshakable conviction. Soft afternoon natural light streams from window right, creating gentle Rembrandt lighting with subtle shadows defining facial contours, catchlight in eyes. Warm golden hour color temperature, highlights in hair showing dimensional texture. Background softly blurred into abstract warm ochres and muted browns suggesting domestic interior. Slight film grain texture, cinematic color grading with lifted blacks and warm midtones. Vignette subtly darkened at edges drawing focus to her face. Atmosphere thick with emotional weight and finality. Perfect focus on eyes and expression, capturing the exact moment of powerful refusal, the conclusive punctuation of her statement. Anamorphic aspect ratio 2.39:1, Netflix prestige drama cinematography, ARRI Alexa LF aesthetic, resolved and complete composition radiating quiet triumph.\n\n---\n\nImage: https://v3b.fal.media/files/b/monkey/0D2D1wkYPSXb9LPyDVo2G.jpg\n\n---\n\nVariants:\nPainterly Impressionist: https://v3b.fal.media/files/b/monkey/2HzGGDIFsommJpPywkMs6.jpg\nEthereal Light Leak: https://v3b.fal.media/files/b/tiger/SXKontT7suO6GNJRyB6RW.jpg\nStark Graphic Novel: https://v3b.fal.media/files/b/elephant/Njk3HK7bCpVzazep0lqfs.jpg",
+        "isLoading": false
+      },
+      "measured": {
+        "width": 150,
+        "height": 394
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "output-3",
+      "type": "output",
+      "position": {
+        "x": 1457.2728033640547,
+        "y": 1888.3412134562182
+      },
+      "data": {
+        "label": "Shot 3 Output",
+        "type": "output",
+        "finalPrompt": "SHOT 3 - AFTERMATH & RESOLVE\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realism, photorealistic, naturalistic, dramatic, atmospheric\nLighting: soft afternoon natural light with gentle shadows\nMood: tense, defiant, resolute, charged with quiet strength\nCamera: subtle slow push-in eye level with medium close-up\nActions: standing firmly, locking eyes with off-camera character, speaking with calm firmness, chest slightly puffed out\n\nThe final shot in the sequence shows the lasting impact of her words. The atmosphere remains charged with quiet strength as she maintains her position, the afternoon light continuing to cast purposeful shadows in the office.\n\n---\n\nPrompt: A cinematic end frame / final shot for a video sequence. Medium close-up at eye level of Wilburn, a middle-aged woman with shoulder-length dark brown hair streaked with gray and warm brown eyes burning with quiet defiance, wearing a modest earth-toned blouse and cardigan. She stands firmly in place, her posture resolute with chest slightly puffed out, maintaining unwavering eye contact with an off-camera presence. Her lips are just finishing their final words, caught in a moment of calm firmness. Soft afternoon natural light streams through office windows, casting purposeful, gentle shadows across her face and the surrounding space, creating dimension and depth. The atmosphere is heavy with the lasting impact of her spoken truth - the air itself seems charged with quiet strength and tension. The background office environment is slightly softened with shallow depth of field, keeping all focus on her powerful presence. Dust particles float subtly in the light beams. Her expression captures the resolution and aftermath of confrontation - defiant yet composed, tired yet triumphant, vulnerable yet unbreakable. The lighting creates a natural vignette effect, drawing the eye to her face and eyes which reflect both exhaustion and inner fire. The frame holds this final moment, allowing the weight of her words and presence to resonate. Photorealistic, naturalistic, cinematic composition with dramatic atmospheric tension, film grain texture, muted color palette emphasizing earth tones and warm browns, high quality 4K resolution, shot on cinema camera with shallow depth of field, professional color grading.\n\n---\n\nImage: https://v3b.fal.media/files/b/lion/u-ySGPruyHpmjdbu_5NNS.jpg\n\n---\n\nVariants:\nEthereal Light Halo: https://v3b.fal.media/files/b/koala/L95m9cz4PBq7BJ6cehQdG.jpg\nDesaturated Power Portrait: https://v3b.fal.media/files/b/rabbit/MGNeUrMOteId0b_CiynPf.jpg\nGolden Hour Triumph: https://v3b.fal.media/files/b/zebra/WzQmBTLD99Dc-qoIUQ4JB.jpg\n\n---\n\nPrompt: Cinematic photorealistic establishing shot of a tense office interior bathed in soft afternoon natural light streaming through windows, creating gentle shadows across the room. Medium close-up composition at eye level showing Wilburn, a middle-aged woman with shoulder-length dark brown hair featuring natural gray streaks, warm brown eyes filled with defiance and inner strength, mature facial features showing life experience with a determined expression, wearing a modest earth-toned blouse in beige or tan paired with a complementary cardigan in muted brown or natural colors. She stands firmly with confident posture, chest slightly puffed out, average build neither tall nor short, positioned centrally in frame beginning to lock eyes with someone off-camera, her body language radiating quiet strength and resolve. The office setting features naturalistic details with warm wood tones and muted colors, atmospheric lighting casting purposeful shadows that enhance the dramatic tension. Shot on high-end cinema camera with shallow depth of field, naturalistic color grading with earth tones dominating the palette, realism style with attention to fabric textures and environmental details, charged atmosphere of defiance and determination, 4K cinematic quality, professional dramatic lighting setup mimicking natural afternoon sun.\n\n---\n\nImage: https://v3b.fal.media/files/b/lion/jtvuO8j_oq1aLvHv8CU-k_35fb6d6869134ad098e32c8aa01f372d.jpg\n\n---\n\nCharacters:\nWilburn: https://v3b.fal.media/files/b/tiger/rNGWq2Cdec1DbSZ2MNrAx.jpg",
+        "isLoading": false
+      },
+      "measured": {
+        "width": 150,
+        "height": 394
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "input-1761709894258",
+      "type": "input",
+      "position": {
+        "x": 510.28262628338496,
+        "y": 3041.091091128508
+      },
+      "data": {
+        "label": "Text Prompt Input",
+        "type": "input",
+        "prompt": "Wide shot, slow dolly back revealing the tense stillness that follows her defiant words. The protagonist stands near the window, her silhouette outlined by the late-afternoon light streaming in through the sheer curtains, particles of dust visible in the sunbeam. Wilburn, partially visible now—a tall man in a tailored navy suit, silver hair combed precisely, his jaw tight—stands by the desk, his hand resting on a stack of confidential folders marked “Classified.”\nThe protagonist’s hand trembles slightly, but her gaze remains unwavering as she says, “You know this isn’t the way forward.”\nThe camera slowly pivots around her, circling to capture Wilburn’s cold stare and the faint tick of a clock echoing in the silence.\nLighting: soft, golden-hour glow mixed with cool interior shadows, evoking both hope and encroaching uncertainty.\nAudio: subdued ticking clock, faint hum of the air vent, fabric rustle as Wilburn adjusts his stance.\nCinematic realism, 16:9 aspect ratio.\n"
+      },
+      "measured": {
+        "width": 150,
+        "height": 263
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "character-1761709972485",
+      "type": "character",
+      "position": {
+        "x": 988.2998725294433,
+        "y": 3417.585163757094
+      },
+      "data": {
+        "label": "Character",
+        "type": "character",
+        "extractedValue": ["the protagonist", "Wilburn"],
+        "isManual": false,
+        "isLoading": false
+      },
+      "measured": {
+        "width": 250,
+        "height": 218
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "variant-1761709977419",
+      "type": "variant",
+      "position": {
+        "x": 1000.2870423655033,
+        "y": 2652.8026295610443
+      },
+      "data": {
+        "label": "Style Variant",
+        "type": "variant",
+        "extractedValue": ["cinematic", "realistic", "photorealistic"],
+        "isManual": false,
+        "isLoading": false
+      },
+      "measured": {
+        "width": 250,
+        "height": 264
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "shotInfo-1761709978855",
+      "type": "shotInfo",
+      "position": {
+        "x": 937.9647873479921,
+        "y": 2965.704908741571
+      },
+      "data": {
+        "label": "Shot Information",
+        "type": "shotInfo",
+        "extractedValue": {
+          "lighting": "golden-hour glow mixed with cool interior shadows, soft late-afternoon light streaming through sheer curtains",
+          "mood": "tense, uncertain, defiant",
+          "actions": "protagonist standing near window with trembling hand, speaking dialogue, Wilburn standing by desk with hand on classified folders, adjusting stance, camera circling",
+          "shotAngle": "eye level",
+          "cameraLens": "wide angle",
+          "cameraMovement": "slow dolly back, pivoting circle around protagonist"
+        },
+        "isManual": false,
+        "manualOverrides": [],
+        "manualValues": {},
+        "isLoading": false
+      },
+      "measured": {
+        "width": 350,
+        "height": 408
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "contextPrompt-1761710075060",
+      "type": "contextPrompt",
+      "position": {
+        "x": 1450.5160436506753,
+        "y": 2810.2968723871345
+      },
+      "data": {
+        "label": "Context Prompt",
+        "type": "contextPrompt",
+        "template": "SHOT 1 - WIDE DOLLY ZOOM-OUT SHOT\n\nCharacter: {{characters}}\nVariants: {{variants}}\nLighting: {{lighting}}\nMood: {{mood}}\nCamera: {{cameraMovement}} {{shotAngle}} with {{cameraLens}}\nActions: {{actions}}\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.",
+        "preview": "SHOT 1 - WIDE DOLLY ZOOM-OUT SHOT\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic\nLighting: golden-hour glow mixed with cool interior shadows, soft late-afternoon light streaming through sheer curtains\nMood: tense, uncertain, defiant\nCamera: slow dolly back, pivoting circle around protagonist eye level with wide angle\nActions: protagonist standing near window with trembling hand, speaking dialogue, Wilburn standing by desk with hand on classified folders, adjusting stance, camera circling\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.",
+        "inputs": {},
+        "availableVariables": [],
+        "isLoading": false
+      },
+      "measured": {
+        "width": 350,
+        "height": 672
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "startFrame-1761710130374",
+      "type": "startFrame",
+      "position": {
+        "x": 1907.223073936043,
+        "y": 2351.4258157787754
+      },
+      "data": {
+        "label": "Start Frame",
+        "type": "startFrame",
+        "extractedValue": "Wide-angle cinematic establishing shot of a White House office interior at eye level: In the foreground near a tall window stands a middle-aged woman (protagonist) with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, average build, wearing a modest earth-toned blouse and complementary neutral-colored cardigan, her facial features showing maturity with subtle lines suggesting experience and character, upright posture with one hand trembling at her side, natural light illuminating her determined face. In the mid-ground by an executive desk stands Wilburn, hand resting on classified manila folders, in an authoritative stance suggesting official government capacity. The White House office features traditional architectural details, wooden desk, American flags, formal government décor. Golden-hour sunlight streams through sheer curtains creating warm glowing beams that mix with cool interior shadows, soft late-afternoon light creating dramatic contrast. Tense and uncertain atmosphere with defiant energy. Shot from eye level perspective capturing both characters in frame, photorealistic cinematic style, ultra-detailed, professional color grading, shallow depth of field, 35mm film aesthetic, dramatic government thriller composition.",
+        "isManual": false,
+        "selectedCharacters": [],
+        "outputStartFrame": true,
+        "isLoading": false,
+        "generatedPrompt": "Wide-angle cinematic establishing shot of a White House office interior at eye level: In the foreground near a tall window stands a middle-aged woman (protagonist) with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, average build, wearing a modest earth-toned blouse and complementary neutral-colored cardigan, her facial features showing maturity with subtle lines suggesting experience and character, upright posture with one hand trembling at her side, natural light illuminating her determined face. In the mid-ground by an executive desk stands Wilburn, hand resting on classified manila folders, in an authoritative stance suggesting official government capacity. The White House office features traditional architectural details, wooden desk, American flags, formal government décor. Golden-hour sunlight streams through sheer curtains creating warm glowing beams that mix with cool interior shadows, soft late-afternoon light creating dramatic contrast. Tense and uncertain atmosphere with defiant energy. Shot from eye level perspective capturing both characters in frame, photorealistic cinematic style, ultra-detailed, professional color grading, shallow depth of field, 35mm film aesthetic, dramatic government thriller composition.",
+        "generatedImage": "https://v3b.fal.media/files/b/penguin/g7cEU9ShXzuGx42aBvi6t_4a063911e4514599b4b2554cec3dd8d1.jpg",
+        "characterImages": [
+          {
+            "name": "Protagonist",
+            "url": "https://v3b.fal.media/files/b/kangaroo/kwyH8UGWIPJJUZR-Wk-C4.jpg",
+            "description": "Middle-aged woman with shoulder-length dark brown hair streaked with gray. She has warm brown eyes that convey defiance and determination. Her build is average for a middle-aged woman. She wears a modest earth-toned blouse paired with a cardigan in complementary neutral colors. Her facial features show maturity with subtle lines that suggest experience and character. Her posture is upright despite a trembling hand, conveying inner strength mixed with tension. She stands near a window with natural light illuminating her features."
+          },
+          {
+            "name": "Wilburn",
+            "url": "https://v3b.fal.media/files/b/zebra/i4CJCzgViWzwlzAov5Qd_.jpg",
+            "description": "A figure standing by a desk with hand positioned on classified folders. The character adjusts their stance during the scene, suggesting authority or official capacity within the White House Office setting. Their positioning by the desk with classified materials indicates a role of significance or oversight."
+          }
+        ]
+      },
+      "measured": {
+        "width": 350,
+        "height": 530
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "endFrame-1761710131032",
+      "type": "endFrame",
+      "position": {
+        "x": 1899.5044052624007,
+        "y": 2963.238660342403
+      },
+      "data": {
+        "label": "End Frame",
+        "type": "endFrame",
+        "extractedValue": "A cinematic final frame of a video sequence showing a wide-angle view from the completed circular camera movement, capturing a middle-aged woman with shoulder-length dark brown hair streaked with gray and warm brown defiant eyes, wearing an earth-toned blouse and cardigan, positioned near a window in a White House office. The camera has dolled back to its furthest point, revealing the full scope of the room with the protagonist slightly off-center in the composition. Her trembling hand has now steadied, hanging at her side as she completes her final word of dialogue, her expression resolute and unwavering. Wilburn stands in the mid-ground by a mahogany desk, hand resting on classified folders, his silhouette defined but secondary in the frame. The golden-hour light streaming through sheer curtains has intensified, creating dramatic rim lighting around the protagonist's figure while cool blue-gray interior shadows pool in the corners of the room, establishing strong color contrast between warm amber-gold window light and cool shadow tones. The late-afternoon sunbeams cut diagonally across the space, creating visible light rays through atmospheric dust particles. The room details are now fully visible—presidential office furniture, American flags in soft focus, wood paneling catching glints of light. The final composition balances the tension between the protagonist's intimate determination in the foreground and the institutional power represented by the office setting. Subtle lens flare from the window adds cinematic quality. The color grading emphasizes earth tones, deep burgundy shadows, navy blues, and honey-gold highlights. Sharp focus on the protagonist with gradually softening focus toward the edges. Photorealistic, 35mm film aesthetic, Panavision look, high-contrast ratio, professional color correction, 2.39:1 aspect ratio framing, slightly underexposed for dramatic effect, film grain texture, ending freeze frame quality capturing a moment of resolved defiance and quiet strength.",
+        "isManual": false,
+        "isLoading": false,
+        "generatedPrompt": "A cinematic final frame of a video sequence showing a wide-angle view from the completed circular camera movement, capturing a middle-aged woman with shoulder-length dark brown hair streaked with gray and warm brown defiant eyes, wearing an earth-toned blouse and cardigan, positioned near a window in a White House office. The camera has dolled back to its furthest point, revealing the full scope of the room with the protagonist slightly off-center in the composition. Her trembling hand has now steadied, hanging at her side as she completes her final word of dialogue, her expression resolute and unwavering. Wilburn stands in the mid-ground by a mahogany desk, hand resting on classified folders, his silhouette defined but secondary in the frame. The golden-hour light streaming through sheer curtains has intensified, creating dramatic rim lighting around the protagonist's figure while cool blue-gray interior shadows pool in the corners of the room, establishing strong color contrast between warm amber-gold window light and cool shadow tones. The late-afternoon sunbeams cut diagonally across the space, creating visible light rays through atmospheric dust particles. The room details are now fully visible—presidential office furniture, American flags in soft focus, wood paneling catching glints of light. The final composition balances the tension between the protagonist's intimate determination in the foreground and the institutional power represented by the office setting. Subtle lens flare from the window adds cinematic quality. The color grading emphasizes earth tones, deep burgundy shadows, navy blues, and honey-gold highlights. Sharp focus on the protagonist with gradually softening focus toward the edges. Photorealistic, 35mm film aesthetic, Panavision look, high-contrast ratio, professional color correction, 2.39:1 aspect ratio framing, slightly underexposed for dramatic effect, film grain texture, ending freeze frame quality capturing a moment of resolved defiance and quiet strength.",
+        "generatedImage": "https://v3b.fal.media/files/b/monkey/wea-onxRY7Yz4oZC7evz6.jpg",
+        "variantImages": [
+          {
+            "name": "Ethereal Light Flare",
+            "url": "https://v3b.fal.media/files/b/koala/hdpYL105qJmHsmy3TvVFe.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame freezes as the camera completes its circle, capturing the protagonist in sharp focus against a window ablaze with intensified golden-hour light. Lens flare creates dramatic streaks across the frame, with the light halos around her silhouette. The folders on Wilburn's desk are slightly motion-blurred, suggesting time has paused. Dust particles float visibly in the light beams, creating an almost divine quality. The color palette shifts warmer, with amber and honey tones dominating, while deep shadows frame the edges in rich burgundy and navy.. Based on this video concept: SHOT 1 - WIDE DOLLY ZOOM-OUT SHOT\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic\nLighting: golden-hour glow mixed with cool interior shadows, soft late-afternoon light streaming through sheer curtains\nMood: tense, uncertain, defiant\nCamera: slow dolly back, pivoting circle around protagonist eye level with wide angle\nActions: protagonist standing near window with trembling hand, speaking dialogue, Wilburn standing by desk with hand on classified folders, adjusting stance, camera circling\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.. High quality, cinematic composition, photorealistic style."
+          },
+          {
+            "name": "Frozen Motion Noir",
+            "url": "https://v3b.fal.media/files/b/kangaroo/AJJ0WzvelBO085N5ekhP1.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The camera stops mid-rotation at a Dutch angle, tilted 15 degrees counterclockwise. The final frame desaturates to near black-and-white with only subtle hints of color remaining—a touch of brown in her hair, amber in her eyes. Heavy contrast creates stark shadows across half of the protagonist's face while window light creates sharp geometric patterns on the walls. Film grain is added for texture. Wilburn becomes a darkened silhouette at the desk edge. The mood intensifies into classic thriller territory with deep blacks and blown-out highlights in the window area.. Based on this video concept: SHOT 1 - WIDE DOLLY ZOOM-OUT SHOT\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic\nLighting: golden-hour glow mixed with cool interior shadows, soft late-afternoon light streaming through sheer curtains\nMood: tense, uncertain, defiant\nCamera: slow dolly back, pivoting circle around protagonist eye level with wide angle\nActions: protagonist standing near window with trembling hand, speaking dialogue, Wilburn standing by desk with hand on classified folders, adjusting stance, camera circling\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.. High quality, cinematic composition, photorealistic style."
+          },
+          {
+            "name": "Painterly Depth Blur",
+            "url": "https://v3b.fal.media/files/b/elephant/CmEDsTzZIKZEnPkmTi28e.jpg",
+            "prompt": "A cinematic end frame / final shot for a video sequence. The final frame captures the protagonist in crystalline focus while everything else—Wilburn, the desk, the room's edges—dissolves into soft, impressionistic blur with a shallow depth of field effect. The background takes on a painted quality with blended colors: sage greens, warm ochres, and soft grays bleeding into each other like watercolor. The light through the curtains becomes abstracted into glowing patches of cream and gold. Her figure stands sharp and real against this dreamlike environment, emphasizing isolation and determination. Slight vignetting darkens the corners, drawing all attention to her centered position.. Based on this video concept: SHOT 1 - WIDE DOLLY ZOOM-OUT SHOT\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic\nLighting: golden-hour glow mixed with cool interior shadows, soft late-afternoon light streaming through sheer curtains\nMood: tense, uncertain, defiant\nCamera: slow dolly back, pivoting circle around protagonist eye level with wide angle\nActions: protagonist standing near window with trembling hand, speaking dialogue, Wilburn standing by desk with hand on classified folders, adjusting stance, camera circling\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.. High quality, cinematic composition, photorealistic style."
+          }
+        ]
+      },
+      "measured": {
+        "width": 350,
+        "height": 468
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "output-1761710157385",
+      "type": "output",
+      "position": {
+        "x": 2353.5570185370916,
+        "y": 2720.5104650602593
+      },
+      "data": {
+        "label": "Final Output",
+        "type": "output",
+        "finalPrompt": "SHOT 1 - WIDE DOLLY ZOOM-OUT SHOT\n\nCharacter: protagonist - middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, wearing modest earth-toned blouse and cardigan, Wilburn\nVariants: cinematic, realistic, photorealistic\nLighting: golden-hour glow mixed with cool interior shadows, soft late-afternoon light streaming through sheer curtains\nMood: tense, uncertain, defiant\nCamera: slow dolly back, pivoting circle around protagonist eye level with wide angle\nActions: protagonist standing near window with trembling hand, speaking dialogue, Wilburn standing by desk with hand on classified folders, adjusting stance, camera circling\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.\n\n---\n\nPrompt: Wide-angle cinematic establishing shot of a White House office interior at eye level: In the foreground near a tall window stands a middle-aged woman (protagonist) with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, average build, wearing a modest earth-toned blouse and complementary neutral-colored cardigan, her facial features showing maturity with subtle lines suggesting experience and character, upright posture with one hand trembling at her side, natural light illuminating her determined face. In the mid-ground by an executive desk stands Wilburn, hand resting on classified manila folders, in an authoritative stance suggesting official government capacity. The White House office features traditional architectural details, wooden desk, American flags, formal government décor. Golden-hour sunlight streams through sheer curtains creating warm glowing beams that mix with cool interior shadows, soft late-afternoon light creating dramatic contrast. Tense and uncertain atmosphere with defiant energy. Shot from eye level perspective capturing both characters in frame, photorealistic cinematic style, ultra-detailed, professional color grading, shallow depth of field, 35mm film aesthetic, dramatic government thriller composition.\n\n---\n\nImage: https://v3b.fal.media/files/b/penguin/g7cEU9ShXzuGx42aBvi6t_4a063911e4514599b4b2554cec3dd8d1.jpg\n\n---\n\nCharacters:\nProtagonist: https://v3b.fal.media/files/b/kangaroo/kwyH8UGWIPJJUZR-Wk-C4.jpg\nWilburn: https://v3b.fal.media/files/b/zebra/i4CJCzgViWzwlzAov5Qd_.jpg\n\n---\n\nPrompt: A cinematic final frame of a video sequence showing a wide-angle view from the completed circular camera movement, capturing a middle-aged woman with shoulder-length dark brown hair streaked with gray and warm brown defiant eyes, wearing an earth-toned blouse and cardigan, positioned near a window in a White House office. The camera has dolled back to its furthest point, revealing the full scope of the room with the protagonist slightly off-center in the composition. Her trembling hand has now steadied, hanging at her side as she completes her final word of dialogue, her expression resolute and unwavering. Wilburn stands in the mid-ground by a mahogany desk, hand resting on classified folders, his silhouette defined but secondary in the frame. The golden-hour light streaming through sheer curtains has intensified, creating dramatic rim lighting around the protagonist's figure while cool blue-gray interior shadows pool in the corners of the room, establishing strong color contrast between warm amber-gold window light and cool shadow tones. The late-afternoon sunbeams cut diagonally across the space, creating visible light rays through atmospheric dust particles. The room details are now fully visible—presidential office furniture, American flags in soft focus, wood paneling catching glints of light. The final composition balances the tension between the protagonist's intimate determination in the foreground and the institutional power represented by the office setting. Subtle lens flare from the window adds cinematic quality. The color grading emphasizes earth tones, deep burgundy shadows, navy blues, and honey-gold highlights. Sharp focus on the protagonist with gradually softening focus toward the edges. Photorealistic, 35mm film aesthetic, Panavision look, high-contrast ratio, professional color correction, 2.39:1 aspect ratio framing, slightly underexposed for dramatic effect, film grain texture, ending freeze frame quality capturing a moment of resolved defiance and quiet strength.\n\n---\n\nImage: https://v3b.fal.media/files/b/monkey/wea-onxRY7Yz4oZC7evz6.jpg\n\n---\n\nVariants:\nEthereal Light Flare: https://v3b.fal.media/files/b/koala/hdpYL105qJmHsmy3TvVFe.jpg\nFrozen Motion Noir: https://v3b.fal.media/files/b/kangaroo/AJJ0WzvelBO085N5ekhP1.jpg\nPainterly Depth Blur: https://v3b.fal.media/files/b/elephant/CmEDsTzZIKZEnPkmTi28e.jpg",
+        "isLoading": false
+      },
+      "measured": {
+        "width": 150,
+        "height": 394
+      },
+      "selected": false,
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1",
+      "sourceHandle": "source-bottom",
+      "target": "shot-3",
+      "targetHandle": "source-left",
+      "id": "xy-edge__input-1source-bottom-shot-3source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1",
+      "sourceHandle": "source-bottom",
+      "target": "variant-3",
+      "targetHandle": "target-left",
+      "id": "xy-edge__input-1source-bottom-variant-3target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1",
+      "sourceHandle": "source-right",
+      "target": "char-3",
+      "targetHandle": "source-left",
+      "id": "xy-edge__input-1source-right-char-3source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1",
+      "sourceHandle": "source-right",
+      "target": "shot-2",
+      "targetHandle": "target-left",
+      "id": "xy-edge__input-1source-right-shot-2target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1",
+      "sourceHandle": "source-right",
+      "target": "variant-2",
+      "targetHandle": "target-left",
+      "id": "xy-edge__input-1source-right-variant-2target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1",
+      "sourceHandle": "source-right",
+      "target": "char-2",
+      "targetHandle": "target-left",
+      "id": "xy-edge__input-1source-right-char-2target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1",
+      "sourceHandle": "source-top",
+      "target": "shot-1",
+      "targetHandle": "source-left",
+      "id": "xy-edge__input-1source-top-shot-1source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1",
+      "sourceHandle": "source-top",
+      "target": "variant-1",
+      "targetHandle": "source-left",
+      "id": "xy-edge__input-1source-top-variant-1source-left",
+      "selected": false
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1",
+      "sourceHandle": "source-top",
+      "target": "char-1",
+      "targetHandle": "target-left",
+      "id": "xy-edge__input-1source-top-char-1target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "char-1",
+      "sourceHandle": "source-right",
+      "target": "context-1",
+      "targetHandle": "source-left",
+      "id": "xy-edge__char-1source-right-context-1source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "variant-1",
+      "sourceHandle": "source-right",
+      "target": "context-1",
+      "targetHandle": "target-left",
+      "id": "xy-edge__variant-1source-right-context-1target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "shot-1",
+      "sourceHandle": "source-right",
+      "target": "context-1",
+      "targetHandle": "source-left",
+      "id": "xy-edge__shot-1source-right-context-1source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "char-2",
+      "sourceHandle": "source-right",
+      "target": "context-2",
+      "targetHandle": "source-left",
+      "id": "xy-edge__char-2source-right-context-2source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "variant-2",
+      "sourceHandle": "source-right",
+      "target": "context-2",
+      "targetHandle": "source-left",
+      "id": "xy-edge__variant-2source-right-context-2source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "shot-2",
+      "sourceHandle": "source-right",
+      "target": "context-2",
+      "targetHandle": "source-left",
+      "id": "xy-edge__shot-2source-right-context-2source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "char-3",
+      "sourceHandle": "source-right",
+      "target": "context-3",
+      "targetHandle": "target-left",
+      "id": "xy-edge__char-3source-right-context-3target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "variant-3",
+      "sourceHandle": "source-right",
+      "target": "context-3",
+      "targetHandle": "source-left",
+      "id": "xy-edge__variant-3source-right-context-3source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "shot-3",
+      "sourceHandle": "source-right",
+      "target": "context-3",
+      "targetHandle": "source-left",
+      "id": "xy-edge__shot-3source-right-context-3source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "context-1",
+      "sourceHandle": "source-right",
+      "target": "start-1",
+      "targetHandle": "target-left",
+      "id": "xy-edge__context-1source-right-start-1target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "start-1",
+      "sourceHandle": "source-right",
+      "target": "output-1",
+      "targetHandle": "target-top",
+      "id": "xy-edge__start-1source-right-output-1target-top"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "context-1",
+      "sourceHandle": "source-right",
+      "target": "output-1",
+      "targetHandle": "target-left",
+      "id": "xy-edge__context-1source-right-output-1target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "context-1",
+      "sourceHandle": "source-right",
+      "target": "end-1",
+      "targetHandle": "target-left",
+      "id": "xy-edge__context-1source-right-end-1target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "end-1",
+      "sourceHandle": "source-right",
+      "target": "output-1",
+      "targetHandle": "target-bottom",
+      "id": "xy-edge__end-1source-right-output-1target-bottom"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "context-2",
+      "sourceHandle": "source-right",
+      "target": "end-2",
+      "targetHandle": "source-left",
+      "id": "xy-edge__context-2source-right-end-2source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "context-2",
+      "sourceHandle": "source-right",
+      "target": "start-2",
+      "targetHandle": "target-left",
+      "id": "xy-edge__context-2source-right-start-2target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "context-2",
+      "sourceHandle": "source-right",
+      "target": "output-2",
+      "targetHandle": "target-left",
+      "id": "xy-edge__context-2source-right-output-2target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "start-2",
+      "sourceHandle": "source-right",
+      "target": "output-2",
+      "targetHandle": "target-top",
+      "id": "xy-edge__start-2source-right-output-2target-top"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "end-2",
+      "sourceHandle": "source-right",
+      "target": "output-2",
+      "targetHandle": "target-bottom",
+      "id": "xy-edge__end-2source-right-output-2target-bottom"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "context-3",
+      "sourceHandle": "source-right",
+      "target": "start-3",
+      "targetHandle": "target-left",
+      "id": "xy-edge__context-3source-right-start-3target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "context-3",
+      "sourceHandle": "source-right",
+      "target": "end-3",
+      "targetHandle": "source-left",
+      "id": "xy-edge__context-3source-right-end-3source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "context-3",
+      "sourceHandle": "source-right",
+      "target": "output-3",
+      "targetHandle": "target-left",
+      "id": "xy-edge__context-3source-right-output-3target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "end-3",
+      "sourceHandle": "source-right",
+      "target": "output-3",
+      "targetHandle": "target-bottom",
+      "id": "xy-edge__end-3source-right-output-3target-bottom"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "start-3",
+      "sourceHandle": "source-right",
+      "target": "output-3",
+      "targetHandle": "target-top",
+      "id": "xy-edge__start-3source-right-output-3target-top"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1761709894258",
+      "sourceHandle": "source-right",
+      "target": "shotInfo-1761709978855",
+      "targetHandle": "source-left",
+      "id": "xy-edge__input-1761709894258source-right-shotInfo-1761709978855source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1761709894258",
+      "sourceHandle": "source-top",
+      "target": "variant-1761709977419",
+      "targetHandle": "source-left",
+      "id": "xy-edge__input-1761709894258source-top-variant-1761709977419source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "input-1761709894258",
+      "sourceHandle": "source-bottom",
+      "target": "character-1761709972485",
+      "targetHandle": "target-left",
+      "id": "xy-edge__input-1761709894258source-bottom-character-1761709972485target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "variant-1761709977419",
+      "sourceHandle": "source-right",
+      "target": "contextPrompt-1761710075060",
+      "targetHandle": "source-top",
+      "id": "xy-edge__variant-1761709977419source-right-contextPrompt-1761710075060source-top"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "shotInfo-1761709978855",
+      "sourceHandle": "source-right",
+      "target": "contextPrompt-1761710075060",
+      "targetHandle": "source-left",
+      "id": "xy-edge__shotInfo-1761709978855source-right-contextPrompt-1761710075060source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "character-1761709972485",
+      "sourceHandle": "source-right",
+      "target": "contextPrompt-1761710075060",
+      "targetHandle": "target-bottom",
+      "id": "xy-edge__character-1761709972485source-right-contextPrompt-1761710075060target-bottom"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "char-3",
+      "sourceHandle": "source-bottom",
+      "target": "contextPrompt-1761710075060",
+      "targetHandle": "target-top",
+      "id": "xy-edge__char-3source-bottom-contextPrompt-1761710075060target-top"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "contextPrompt-1761710075060",
+      "sourceHandle": "source-right",
+      "target": "startFrame-1761710130374",
+      "targetHandle": "source-left",
+      "id": "xy-edge__contextPrompt-1761710075060source-right-startFrame-1761710130374source-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "contextPrompt-1761710075060",
+      "sourceHandle": "source-right",
+      "target": "endFrame-1761710131032",
+      "targetHandle": "target-left",
+      "id": "xy-edge__contextPrompt-1761710075060source-right-endFrame-1761710131032target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "contextPrompt-1761710075060",
+      "sourceHandle": "source-right",
+      "target": "output-1761710157385",
+      "targetHandle": "target-left",
+      "id": "xy-edge__contextPrompt-1761710075060source-right-output-1761710157385target-left"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "startFrame-1761710130374",
+      "sourceHandle": "source-right",
+      "target": "output-1761710157385",
+      "targetHandle": "target-top",
+      "id": "xy-edge__startFrame-1761710130374source-right-output-1761710157385target-top"
+    },
+    {
+      "type": "smoothstep",
+      "animated": true,
+      "style": {
+        "stroke": "#3b82f6",
+        "strokeWidth": 2.5
+      },
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "source": "endFrame-1761710131032",
+      "sourceHandle": "source-right",
+      "target": "output-1761710157385",
+      "targetHandle": "target-bottom",
+      "id": "xy-edge__endFrame-1761710131032source-right-output-1761710157385target-bottom"
+    }
+  ],
+  "createdAt": "2025-10-29T04:13:40.243Z",
+  "updatedAt": "2025-10-29T04:13:40.243Z"
+}

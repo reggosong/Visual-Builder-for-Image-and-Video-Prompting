@@ -3,6 +3,8 @@ import type { Node, Edge } from "@xyflow/react";
 // Node Types
 export type NodeType =
   | "input"
+  | "sceneCollection"
+  | "sceneShotPlanner"
   | "startFrame"
   | "endFrame"
   | "continuityPlanner"
@@ -53,6 +55,24 @@ export interface ShotInfo {
   cameraMovement?: string;
 }
 
+export interface SceneDefinition {
+  id: string;
+  title: string;
+  prompt: string;
+}
+
+export interface ShotPlan {
+  id: string;
+  title: string;
+  description: string;
+  startFramePrompt: string;
+  endFramePrompt: string;
+  videoPrompt: string;
+  durationSeconds?: number;
+  cameraNotes?: string;
+  inspirationReferences?: string[];
+}
+
 // Base Node Data
 export interface BaseNodeData {
   label: string;
@@ -67,6 +87,13 @@ export interface BaseNodeData {
 export interface InputNodeData extends BaseNodeData {
   type: "input";
   prompt: string;
+}
+
+export interface SceneCollectionNodeData extends BaseNodeData {
+  type: "sceneCollection";
+  scenes: SceneDefinition[];
+  activeSceneId?: string | null;
+  autoSplit?: boolean;
 }
 
 export interface StartFrameNodeData extends BaseNodeData {
@@ -115,8 +142,22 @@ export interface ContextPromptNodeData extends BaseNodeData {
   type: "contextPrompt";
   template: string;
   preview: string;
-  inputs: Record<string, any>;
+  inputs: Record<string, unknown>;
   availableVariables: string[];
+}
+
+export interface SceneShotPlannerNodeData extends BaseNodeData {
+  type: "sceneShotPlanner";
+  sceneOverride?: string;
+  planStrategy?: string;
+  includeTransitions?: boolean;
+  shotPlan: ShotPlan[];
+  summary?: string;
+  totalDurationSeconds?: number;
+  lastSceneTitle?: string;
+  lastSceneId?: string;
+  lastScenePrompt?: string;
+  lastRunAt?: number;
 }
 
 export interface ImageGenNodeData extends BaseNodeData {
@@ -134,7 +175,7 @@ export interface LLMNodeData extends BaseNodeData {
   type: "llm";
   template: string;
   response: string;
-  inputs: Record<string, any>;
+  inputs: Record<string, unknown>;
   availableVariables: string[];
   model: "claude" | "llama";
   maxTokens: number;
@@ -150,10 +191,12 @@ export interface OutputNodeData extends BaseNodeData {
 
 export type WorkflowNodeData =
   | InputNodeData
+  | SceneCollectionNodeData
   | StartFrameNodeData
   | EndFrameNodeData
   | ContinuityPlannerNodeData
   | ContextPromptNodeData
+  | SceneShotPlannerNodeData
   | ImageGenNodeData
   | LLMNodeData
   | OutputNodeData;
@@ -180,7 +223,7 @@ export interface WorkflowState {
   nodes: WorkflowNode[];
   edges: WorkflowEdge[];
   selectedNode: WorkflowNode | null;
-  workflowData: Map<string, any>;
+  workflowData: Map<string, unknown>;
   history: {
     past: Array<{ nodes: WorkflowNode[]; edges: WorkflowEdge[] }>;
     future: Array<{ nodes: WorkflowNode[]; edges: WorkflowEdge[] }>;
@@ -201,7 +244,7 @@ export interface WorkflowExport {
 // Extraction Result
 export interface ExtractionResult {
   success: boolean;
-  value: any;
+  value: unknown;
   confidence?: number;
   error?: string;
 }

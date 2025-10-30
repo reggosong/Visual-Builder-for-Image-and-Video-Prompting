@@ -1,105 +1,39 @@
 @import "tailwindcss";
 
 /* React Flow Node Resizer Styles */
-.react-flow__resize-control.handle {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
-  background: #3b82f6;
-  border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
 
+.node-resizer-line,
 .react-flow__resize-control.line {
-  position: absolute;
-  border-style: solid;
-  border-color: #3b82f6;
+  display: none !important;
 }
 
-.react-flow__resize-control.line.horizontal {
-  height: 0;
-  border-width: 1px 0 0 0;
-  left: 0;
-  right: 0;
+.node-resizer-handle {
+  width: 14px;
+  height: 14px;
+  border-radius: 6px;
+  background: #2563eb;
+  border: 1px solid rgba(30, 41, 59, 0.35);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+  translate: -50% -50%;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
 }
 
-.react-flow__resize-control.line.vertical {
-  width: 0;
-  border-width: 0 0 0 1px;
-  top: 0;
-  bottom: 0;
+.dark .node-resizer-handle {
+  background: #3b82f6;
+  border-color: rgba(148, 163, 184, 0.35);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.35);
 }
 
-/* Edge handle positioning - centered on each side */
-.react-flow__resize-control.handle.top {
-  top: -6px;
-  left: 50%;
-  margin-left: -6px;
+.node-resizer-handle:hover,
+.node-resizer-handle:focus-visible {
+  background: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
-.react-flow__resize-control.handle.bottom {
-  bottom: -6px;
-  left: 50%;
-  margin-left: -6px;
-}
-
-.react-flow__resize-control.handle.left {
-  left: -6px;
-  top: 50%;
-  margin-top: -6px;
-}
-
-.react-flow__resize-control.handle.right {
-  right: -6px;
-  top: 50%;
-  margin-top: -6px;
-}
-
-/* Corner handles positioning */
-.react-flow__resize-control.handle.top.left {
-  top: -6px;
-  left: -6px;
-  margin: 0;
-}
-
-.react-flow__resize-control.handle.top.right {
-  top: -6px;
-  right: -6px;
-  left: auto;
-  margin: 0;
-}
-
-.react-flow__resize-control.handle.bottom.left {
-  bottom: -6px;
-  left: -6px;
-  top: auto;
-  margin: 0;
-}
-
-.react-flow__resize-control.handle.bottom.right {
-  bottom: -6px;
-  right: -6px;
-  left: auto;
-  top: auto;
-  margin: 0;
-}
-
-/* Edge lines positioning */
-.react-flow__resize-control.line.top {
-  top: 0;
-}
-
-.react-flow__resize-control.line.bottom {
-  bottom: 0;
-}
-
-.react-flow__resize-control.line.left {
-  left: 0;
-}
-
-.react-flow__resize-control.line.right {
-  right: 0;
+.dark .node-resizer-handle:hover,
+.dark .node-resizer-handle:focus-visible {
+  background: #2563eb;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
 }
 
 /* React Flow Handles - Connection Points */
@@ -111,31 +45,34 @@
   cursor: crosshair;
   z-index: 10;
   border-radius: 50%;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: #3b82f6;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.2);
 }
 
 /* Position handles correctly - centered on edges */
 .react-flow__handle.react-flow__handle-top {
   top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -100%);
 }
 
 .react-flow__handle.react-flow__handle-bottom {
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, 100%);
 }
 
 .react-flow__handle.react-flow__handle-left {
   left: 0;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-100%, -50%);
 }
 
 .react-flow__handle.react-flow__handle-right {
   right: 0;
   top: 50%;
-  transform: translate(50%, -50%);
+  transform: translate(100%, -50%);
 }
 
 .react-flow__handle-connecting {

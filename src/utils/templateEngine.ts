@@ -4,7 +4,7 @@
 
 export interface TemplateVariable {
   name: string;
-  value: any;
+  value: unknown;
   type: "string" | "array" | "object";
 }
 
@@ -30,7 +30,7 @@ export function extractVariableNames(template: string): string[] {
 /**
  * Format a value for insertion into template
  */
-function formatValue(value: any): string {
+function formatValue(value: unknown): string {
   if (value === null || value === undefined) {
     return "";
   }
@@ -42,7 +42,7 @@ function formatValue(value: any): string {
   if (typeof value === "object") {
     // For objects like ShotInfo, create a readable string
     const entries = Object.entries(value)
-      .filter(([_, v]) => v != null && v !== "")
+      .filter(([, v]) => v != null && v !== "")
       .map(([k, v]) => `${k}: ${v}`);
     return entries.join(", ");
   }
@@ -55,7 +55,7 @@ function formatValue(value: any): string {
  */
 export function processTemplate(
   template: string,
-  variables: Record<string, any>
+  variables: Record<string, unknown>
 ): string {
   let result = template;
 
@@ -82,7 +82,7 @@ export function processTemplate(
  */
 export function validateTemplate(
   template: string,
-  variables: Record<string, any>
+  variables: Record<string, unknown>
 ): { valid: boolean; missing: string[] } {
   const required = extractVariableNames(template);
   const missing = required.filter(
@@ -101,7 +101,7 @@ export function validateTemplate(
  */
 export function previewTemplate(
   template: string,
-  variables: Record<string, any>
+  variables: Record<string, unknown>
 ): string {
   let result = template;
   const regex = /\{\{([^}]+)\}\}/g;
@@ -123,8 +123,10 @@ export function previewTemplate(
 /**
  * Merge multiple input values into a single context
  */
-export function mergeInputs(inputs: Record<string, any>): Record<string, any> {
-  const merged: Record<string, any> = {};
+export function mergeInputs(
+  inputs: Record<string, unknown>
+): Record<string, unknown> {
+  const merged: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(inputs)) {
     if (value === null || value === undefined) {

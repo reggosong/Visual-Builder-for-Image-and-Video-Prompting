@@ -9,11 +9,22 @@ import {
   FileOutput,
   Search,
   Clock,
+  ListChecks,
+  Clapperboard,
 } from "lucide-react";
-import type { ModuleDefinition, NodeType } from "../types/workflow.types";
+import type { LucideIcon } from "lucide-react";
+import type {
+  ModuleDefinition,
+  NodeType,
+  CustomModuleDefinition,
+} from "../types/workflow.types";
 import { useWorkflowStore } from "../store/workflowStore";
 
-const moduleDefinitions: ModuleDefinition[] = [
+type SidebarModule = ModuleDefinition & {
+  customConfig?: CustomModuleDefinition;
+};
+
+const moduleDefinitions: SidebarModule[] = [
   {
     id: "input",
     type: "input",
@@ -22,6 +33,24 @@ const moduleDefinitions: ModuleDefinition[] = [
     category: "input",
     color: "bg-blue-600",
     icon: "FileText",
+  },
+  {
+    id: "sceneCollection",
+    type: "sceneCollection",
+    label: "Scene Collection",
+    description: "Capture and organize multiple scene prompts",
+    category: "input",
+    color: "bg-amber-600",
+    icon: "ListChecks",
+  },
+  {
+    id: "sceneShotPlanner",
+    type: "sceneShotPlanner",
+    label: "Scene Shot Planner",
+    description: "Break a scene into structured shots with AI prompts",
+    category: "processing",
+    color: "bg-emerald-600",
+    icon: "Clapperboard",
   },
   {
     id: "startFrame",
@@ -88,8 +117,8 @@ const moduleDefinitions: ModuleDefinition[] = [
   },
 ];
 
-const getIcon = (iconName: string) => {
-  const icons: Record<string, any> = {
+const getIcon = (iconName: string): LucideIcon => {
+  const icons: Record<string, LucideIcon> = {
     FileText,
     Film,
     Users,
@@ -98,6 +127,8 @@ const getIcon = (iconName: string) => {
     GitMerge,
     FileOutput,
     Clock,
+    ListChecks,
+    Clapperboard,
   };
   return icons[iconName] || FileText;
 };
@@ -117,7 +148,7 @@ export const Sidebar: React.FC = () => {
   ];
 
   // Convert custom modules to module definitions
-  const customModuleDefs = customModules.map((custom) => ({
+  const customModuleDefs: SidebarModule[] = customModules.map((custom) => ({
     id: custom.id,
     type: custom.baseType,
     label: custom.name,
@@ -129,7 +160,10 @@ export const Sidebar: React.FC = () => {
   }));
 
   // Combine built-in and custom modules
-  const allModules = [...moduleDefinitions, ...customModuleDefs];
+  const allModules: SidebarModule[] = [
+    ...moduleDefinitions,
+    ...customModuleDefs,
+  ];
 
   const filteredModules = allModules.filter((module) => {
     const matchesSearch =
@@ -143,7 +177,7 @@ export const Sidebar: React.FC = () => {
   const handleDragStart = (
     event: React.DragEvent,
     nodeType: NodeType,
-    customConfig?: any
+    customConfig?: CustomModuleDefinition
   ) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     if (customConfig) {
@@ -200,7 +234,7 @@ export const Sidebar: React.FC = () => {
 
       {/* Module List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {filteredModules.map((module: any) => {
+        {filteredModules.map((module: SidebarModule) => {
           const Icon = getIcon(module.icon);
           const isCustom = module.category === "custom";
           return (

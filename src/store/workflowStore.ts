@@ -8,6 +8,10 @@ import type {
   AppSettings,
   MediaItem,
   CustomModuleDefinition,
+  SceneCollectionNodeData,
+  SceneDefinition,
+  SceneShotPlannerNodeData,
+  ShotPlan,
 } from "../types/workflow.types";
 import { executeWorkflow } from "../utils/dataFlowEngine";
 import { initializeFal } from "../services/fal";
@@ -18,7 +22,7 @@ interface WorkflowStore {
   edges: WorkflowEdge[];
   selectedNode: WorkflowNode | null;
   selectedEdge: WorkflowEdge | null;
-  workflowData: Map<string, any>;
+  workflowData: Map<string, unknown>;
   history: {
     past: Array<{ nodes: WorkflowNode[]; edges: WorkflowEdge[] }>;
     future: Array<{ nodes: WorkflowNode[]; edges: WorkflowEdge[] }>;
@@ -234,7 +238,7 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   edges: initialWorkflow.edges,
   selectedNode: null,
   selectedEdge: null,
-  workflowData: new Map(),
+  workflowData: new Map<string, unknown>(),
   history: {
     past: [],
     future: [],
@@ -258,8 +262,8 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   onNodesChange: (changes) => {
     const newNodes = applyNodeChanges(
       changes,
-      get().nodes as any
-    ) as unknown as WorkflowNode[];
+      get().nodes as WorkflowNode[]
+    ) as WorkflowNode[];
     set({ nodes: newNodes });
     saveToSession(newNodes, get().edges);
   },
@@ -358,6 +362,7 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
             "continuityPlanner",
             "imageGen",
             "llm",
+            "sceneShotPlanner",
           ].includes(node.data.type)
         ) {
           return {
@@ -379,6 +384,55 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
           const result = results.get(node.id);
           if (result !== undefined) {
             switch (node.data.type) {
+              case "sceneCollection": {
+                const collectionResult = (result || {}) as {
+                  scenes?: SceneDefinition[];
+                  activeSceneId?: string | null;
+                };
+                const existingData = node.data as SceneCollectionNodeData &
+                  Record<string, unknown>;
+                const resolvedScenes =
+                  collectionResult.scenes || existingData.scenes;
+                const fallbackSceneId = resolvedScenes[0]?.id ?? null;
+                return {
+                  ...node,
+                  data: {
+                    ...existingData,
+                    scenes: resolvedScenes,
+                    activeSceneId:
+                      collectionResult.activeSceneId ??
+                      existingData.activeSceneId ??
+                      fallbackSceneId,
+                    isLoading: false,
+                  },
+                };
+              }
+              case "sceneShotPlanner": {
+                const plannerResult = (result || {}) as {
+                  shotPlan?: ShotPlan[];
+                  summary?: string;
+                  totalDurationSeconds?: number;
+                  lastSceneTitle?: string;
+                  lastSceneId?: string;
+                  lastScenePrompt?: string;
+                };
+                const existingData = node.data as SceneShotPlannerNodeData &
+                  Record<string, unknown>;
+                return {
+                  ...node,
+                  data: {
+                    ...existingData,
+                    shotPlan: plannerResult.shotPlan || [],
+                    summary: plannerResult.summary || "",
+                    totalDurationSeconds: plannerResult.totalDurationSeconds,
+                    lastSceneTitle: plannerResult.lastSceneTitle,
+                    lastSceneId: plannerResult.lastSceneId,
+                    lastScenePrompt: plannerResult.lastScenePrompt,
+                    lastRunAt: Date.now(),
+                    isLoading: false,
+                  },
+                };
+              }
               case "startFrame":
                 return {
                   ...node,

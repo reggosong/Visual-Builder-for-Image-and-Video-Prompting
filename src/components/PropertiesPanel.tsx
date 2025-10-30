@@ -1,6 +1,11 @@
 import React from "react";
 import { useWorkflowStore } from "../store/workflowStore";
 import { X } from "lucide-react";
+import type {
+  SceneCollectionNodeData,
+  SceneShotPlannerNodeData,
+  ShotPlan,
+} from "../types/workflow.types";
 
 export const PropertiesPanel: React.FC = () => {
   const { selectedNode, updateNode, edges, saveCustomModule } =
@@ -123,6 +128,63 @@ export const PropertiesPanel: React.FC = () => {
             </div>
           </div>
         )}
+
+        {nodeData.type === "sceneCollection" &&
+          (() => {
+            const collectionData = nodeData as SceneCollectionNodeData;
+            const scenes = collectionData.scenes || [];
+            return (
+              <div className="space-y-3">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  Active scene feeds downstream connections. Switch scenes or
+                  edit prompts directly in the node.
+                </div>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {scenes.length > 0 ? (
+                    scenes.map((scene, index) => {
+                      const isActive =
+                        scene.id === collectionData.activeSceneId;
+                      return (
+                        <div
+                          key={scene.id || index}
+                          className={`p-2 rounded border text-xs space-y-2 ${
+                            isActive
+                              ? "border-amber-400 bg-amber-50 dark:bg-amber-900/20"
+                              : "border-gray-300 dark:border-gray-600"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="font-semibold text-gray-700 dark:text-gray-200">
+                              {scene.title || `Scene ${index + 1}`}
+                            </div>
+                            {!isActive && scene.id && (
+                              <button
+                                onClick={() =>
+                                  updateNode(selectedNode.id, {
+                                    activeSceneId: scene.id,
+                                  })
+                                }
+                                className="px-2 py-1 rounded bg-amber-500 text-white text-[11px]"
+                              >
+                                Set Active
+                              </button>
+                            )}
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-400 line-clamp-3">
+                            {scene.prompt || "No prompt provided."}
+                          </p>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="p-3 rounded border border-dashed text-center text-xs text-gray-500 dark:text-gray-400">
+                      No scenes defined yet. Use the node UI to add scenes.
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
 
         {/* Context Prompt Template */}
         {nodeData.type === "contextPrompt" && (
@@ -473,6 +535,96 @@ export const PropertiesPanel: React.FC = () => {
             </div>
           </div>
         )}
+
+        {nodeData.type === "sceneShotPlanner" &&
+          (() => {
+            const plannerData = nodeData as SceneShotPlannerNodeData;
+            const shots: ShotPlan[] = plannerData.shotPlan || [];
+            return (
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                      Planning Style
+                    </label>
+                    <select
+                      value={plannerData.planStrategy || "balanced"}
+                      onChange={(e) =>
+                        updateNode(selectedNode.id, {
+                          planStrategy: e.target.value,
+                        })
+                      }
+                      className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    >
+                      <option value="balanced">Balanced coverage</option>
+                      <option value="cinematic">Cinematic emphasis</option>
+                      <option value="character">Character focused</option>
+                      <option value="action">Action heavy</option>
+                    </select>
+                  </div>
+                  <label className="flex items-center gap-2 text-xs p-2 border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={plannerData.includeTransitions !== false}
+                      onChange={(e) =>
+                        updateNode(selectedNode.id, {
+                          includeTransitions: e.target.checked,
+                        })
+                      }
+                      className="rounded"
+                    />
+                    Include transition shots
+                  </label>
+                </div>
+                {plannerData.summary && (
+                  <div className="p-3 rounded border border-emerald-400/40 bg-emerald-500/10 text-xs text-gray-700 dark:text-gray-200">
+                    {plannerData.summary}
+                  </div>
+                )}
+                <div>
+                  <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+                    <span>Shots ({shots.length})</span>
+                    {typeof plannerData.totalDurationSeconds !==
+                      "undefined" && (
+                      <span>
+                        Total Duration: {plannerData.totalDurationSeconds || 0}s
+                      </span>
+                    )}
+                  </div>
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {shots.length > 0 ? (
+                      shots.map((shot, index) => (
+                        <div
+                          key={shot.id || index}
+                          className="p-3 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-xs space-y-1"
+                        >
+                          <div className="font-semibold text-gray-700 dark:text-gray-200">
+                            {shot.title || `Shot ${index + 1}`}
+                          </div>
+                          <div className="text-gray-500 dark:text-gray-400">
+                            {shot.description || "No description."}
+                          </div>
+                          <div className="text-gray-400 dark:text-gray-500">
+                            Start: {shot.startFramePrompt?.slice(0, 120) || "—"}
+                          </div>
+                          <div className="text-gray-400 dark:text-gray-500">
+                            End: {shot.endFramePrompt?.slice(0, 120) || "—"}
+                          </div>
+                          <div className="text-gray-400 dark:text-gray-500">
+                            Video: {shot.videoPrompt?.slice(0, 120) || "—"}
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-3 rounded border border-dashed border-gray-300 dark:border-gray-600 text-center text-xs text-gray-500 dark:text-gray-400">
+                        No shot plan yet. Run the workflow to generate one.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
 
         {/* Type-specific settings */}
         {nodeData.type === "endFrame" && (
@@ -1137,6 +1289,10 @@ function getHelpText(type: string): string {
   switch (type) {
     case "input":
       return "This is the starting point of your workflow. Enter your base video prompt here.";
+    case "sceneCollection":
+      return "Organize multiple scene prompts and choose which one flows downstream into planning nodes.";
+    case "sceneShotPlanner":
+      return "Automatically breaks a scene into cinematic shots and generates prompts for start, end, and video diffusion.";
     case "startFrame":
       return "Generates an optimal start frame image for your video. First extracts and generates each character on a green screen for consistency, then creates the start frame using AI.";
     case "endFrame":
