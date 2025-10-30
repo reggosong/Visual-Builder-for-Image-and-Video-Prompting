@@ -1,0 +1,498 @@
+{
+  "version": "1.0.0",
+  "name": "Three Shot Workflow - White House Office Scene",
+  "description": "Complex workflow for generating 3 shots with start and end frames, using context prompt builders to pass information between nodes",
+  "nodes": [
+    {
+      "id": "input-1",
+      "type": "input",
+      "position": { "x": 100, "y": 400 },
+      "data": {
+        "label": "Master Scene Prompt",
+        "type": "input",
+        "prompt": "Medium close-up shot with a subtle slow push-in focusing intently on the protagonist, a middle-aged woman with shoulder-length dark brown hair streaked with gray, warm brown eyes filled with defiance, and a complexion marked by weariness yet resilience, dressed in a modest earth-toned blouse and cardigan. She stands firmly in the stately White House Office, framed by dark wood paneling and heavy burgundy drapes with soft afternoon light filtering through a large window, casting gentle yet deliberate shadows that accentuate the tension and gravity of the moment. The protagonist locks eyes with Wilburn just off-camera, her chest slightly puffed out as she speaks with calm but resolute firmness, saying: No, Wilburn. The atmosphere is charged with a quiet strength and mounting tension, the ambient office sounds faint with the subtle rustle of papers and the soft creak of a leather chair in the background complementing her steady breathing. The lighting emphasizes warm natural tones highlighting the protagonist's determined expression, while the cinematic realism style captures the nuanced texture of her skin and the fine details of the setting. Audio: quiet ambient office noises, soft paper rustling, calm steady breathing, protagonist's voice calm but resolute. Cinematic realism style, 16:9 aspect ratio"
+      }
+    },
+    {
+      "id": "char-1",
+      "type": "character",
+      "position": { "x": 400, "y": 100 },
+      "data": {
+        "label": "Shot 1 - Character Info",
+        "type": "character",
+        "extractedValue": [],
+        "isManual": false
+      }
+    },
+    {
+      "id": "variant-1",
+      "type": "variant",
+      "position": { "x": 400, "y": 250 },
+      "data": {
+        "label": "Shot 1 - Variants",
+        "type": "variant",
+        "extractedValue": [],
+        "isManual": false
+      }
+    },
+    {
+      "id": "shot-1",
+      "type": "shotInfo",
+      "position": { "x": 400, "y": 400 },
+      "data": {
+        "label": "Shot 1 - Shot Info",
+        "type": "shotInfo",
+        "extractedValue": {},
+        "isManual": false,
+        "manualOverrides": [],
+        "manualValues": {}
+      }
+    },
+    {
+      "id": "context-1",
+      "type": "contextPrompt",
+      "position": { "x": 700, "y": 250 },
+      "data": {
+        "label": "Shot 1 Context Builder",
+        "type": "contextPrompt",
+        "template": "SHOT 1 - ESTABLISHING CLOSE-UP\n\nCharacter: {{characters}}\nVariants: {{variants}}\nLighting: {{lighting}}\nMood: {{mood}}\nCamera: {{cameraMovement}} {{shotAngle}} with {{cameraLens}}\nActions: {{actions}}\n\nThis is the opening shot establishing the protagonist's determined stance in the White House Office.",
+        "preview": "",
+        "inputs": {},
+        "availableVariables": []
+      }
+    },
+    {
+      "id": "start-1",
+      "type": "startFrame",
+      "position": { "x": 1000, "y": 150 },
+      "data": {
+        "label": "Shot 1 - Start Frame",
+        "type": "startFrame",
+        "extractedValue": "",
+        "isManual": false,
+        "outputStartFrame": true,
+        "selectedCharacters": []
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "endFrame",
+      "position": { "x": 1000, "y": 350 },
+      "data": {
+        "label": "Shot 1 - End Frame",
+        "type": "endFrame",
+        "extractedValue": "",
+        "isManual": false
+      }
+    },
+    {
+      "id": "char-2",
+      "type": "character",
+      "position": { "x": 400, "y": 600 },
+      "data": {
+        "label": "Shot 2 - Character Info",
+        "type": "character",
+        "extractedValue": [],
+        "isManual": false
+      }
+    },
+    {
+      "id": "variant-2",
+      "type": "variant",
+      "position": { "x": 400, "y": 750 },
+      "data": {
+        "label": "Shot 2 - Variants",
+        "type": "variant",
+        "extractedValue": [],
+        "isManual": false
+      }
+    },
+    {
+      "id": "shot-2",
+      "type": "shotInfo",
+      "position": { "x": 400, "y": 900 },
+      "data": {
+        "label": "Shot 2 - Shot Info",
+        "type": "shotInfo",
+        "extractedValue": {},
+        "isManual": false,
+        "manualOverrides": [],
+        "manualValues": {}
+      }
+    },
+    {
+      "id": "context-2",
+      "type": "contextPrompt",
+      "position": { "x": 700, "y": 750 },
+      "data": {
+        "label": "Shot 2 Context Builder",
+        "type": "contextPrompt",
+        "template": "SHOT 2 - REACTION & DIALOGUE\n\nCharacter: {{characters}}\nVariants: {{variants}}\nLighting: {{lighting}}\nMood: {{mood}}\nCamera: {{cameraMovement}} {{shotAngle}} with {{cameraLens}}\nActions: {{actions}}\n\nContinuing from Shot 1, this captures the protagonist's powerful moment of speaking 'No, Wilburn' with unwavering conviction. The camera pushes in slightly to emphasize her emotional intensity.",
+        "preview": "",
+        "inputs": {},
+        "availableVariables": []
+      }
+    },
+    {
+      "id": "start-2",
+      "type": "startFrame",
+      "position": { "x": 1000, "y": 650 },
+      "data": {
+        "label": "Shot 2 - Start Frame",
+        "type": "startFrame",
+        "extractedValue": "",
+        "isManual": false,
+        "outputStartFrame": true,
+        "selectedCharacters": []
+      }
+    },
+    {
+      "id": "end-2",
+      "type": "endFrame",
+      "position": { "x": 1000, "y": 850 },
+      "data": {
+        "label": "Shot 2 - End Frame",
+        "type": "endFrame",
+        "extractedValue": "",
+        "isManual": false
+      }
+    },
+    {
+      "id": "char-3",
+      "type": "character",
+      "position": { "x": 400, "y": 1100 },
+      "data": {
+        "label": "Shot 3 - Character Info",
+        "type": "character",
+        "extractedValue": [],
+        "isManual": false
+      }
+    },
+    {
+      "id": "variant-3",
+      "type": "variant",
+      "position": { "x": 400, "y": 1250 },
+      "data": {
+        "label": "Shot 3 - Variants",
+        "type": "variant",
+        "extractedValue": [],
+        "isManual": false
+      }
+    },
+    {
+      "id": "shot-3",
+      "type": "shotInfo",
+      "position": { "x": 400, "y": 1400 },
+      "data": {
+        "label": "Shot 3 - Shot Info",
+        "type": "shotInfo",
+        "extractedValue": {},
+        "isManual": false,
+        "manualOverrides": [],
+        "manualValues": {}
+      }
+    },
+    {
+      "id": "context-3",
+      "type": "contextPrompt",
+      "position": { "x": 700, "y": 1250 },
+      "data": {
+        "label": "Shot 3 Context Builder",
+        "type": "contextPrompt",
+        "template": "SHOT 3 - AFTERMATH & RESOLVE\n\nCharacter: {{characters}}\nVariants: {{variants}}\nLighting: {{lighting}}\nMood: {{mood}}\nCamera: {{cameraMovement}} {{shotAngle}} with {{cameraLens}}\nActions: {{actions}}\n\nThe final shot in the sequence shows the lasting impact of her words. The atmosphere remains charged with quiet strength as she maintains her position, the afternoon light continuing to cast purposeful shadows in the office.",
+        "preview": "",
+        "inputs": {},
+        "availableVariables": []
+      }
+    },
+    {
+      "id": "start-3",
+      "type": "startFrame",
+      "position": { "x": 1000, "y": 1150 },
+      "data": {
+        "label": "Shot 3 - Start Frame",
+        "type": "startFrame",
+        "extractedValue": "",
+        "isManual": false,
+        "outputStartFrame": true,
+        "selectedCharacters": []
+      }
+    },
+    {
+      "id": "end-3",
+      "type": "endFrame",
+      "position": { "x": 1000, "y": 1350 },
+      "data": {
+        "label": "Shot 3 - End Frame",
+        "type": "endFrame",
+        "extractedValue": "",
+        "isManual": false
+      }
+    },
+    {
+      "id": "output-1",
+      "type": "output",
+      "position": { "x": 1300, "y": 250 },
+      "data": {
+        "label": "Shot 1 Output",
+        "type": "output",
+        "finalPrompt": ""
+      }
+    },
+    {
+      "id": "output-2",
+      "type": "output",
+      "position": { "x": 1300, "y": 750 },
+      "data": {
+        "label": "Shot 2 Output",
+        "type": "output",
+        "finalPrompt": ""
+      }
+    },
+    {
+      "id": "output-3",
+      "type": "output",
+      "position": { "x": 1300, "y": 1250 },
+      "data": {
+        "label": "Shot 3 Output",
+        "type": "output",
+        "finalPrompt": ""
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-input-char1",
+      "source": "input-1",
+      "target": "char-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-input-variant1",
+      "source": "input-1",
+      "target": "variant-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-input-shot1",
+      "source": "input-1",
+      "target": "shot-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-char1-context1",
+      "source": "char-1",
+      "target": "context-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-variant1-context1",
+      "source": "variant-1",
+      "target": "context-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-shot1-context1",
+      "source": "shot-1",
+      "target": "context-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-context1-start1",
+      "source": "context-1",
+      "target": "start-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-context1-end1",
+      "source": "context-1",
+      "target": "end-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-context1-output1",
+      "source": "context-1",
+      "target": "output-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-input-char2",
+      "source": "input-1",
+      "target": "char-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-input-variant2",
+      "source": "input-1",
+      "target": "variant-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-input-shot2",
+      "source": "input-1",
+      "target": "shot-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-char2-context2",
+      "source": "char-2",
+      "target": "context-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-variant2-context2",
+      "source": "variant-2",
+      "target": "context-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-shot2-context2",
+      "source": "shot-2",
+      "target": "context-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-context2-start2",
+      "source": "context-2",
+      "target": "start-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-context2-end2",
+      "source": "context-2",
+      "target": "end-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-context2-output2",
+      "source": "context-2",
+      "target": "output-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-input-char3",
+      "source": "input-1",
+      "target": "char-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-input-variant3",
+      "source": "input-1",
+      "target": "variant-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-input-shot3",
+      "source": "input-1",
+      "target": "shot-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-char3-context3",
+      "source": "char-3",
+      "target": "context-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-variant3-context3",
+      "source": "variant-3",
+      "target": "context-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-shot3-context3",
+      "source": "shot-3",
+      "target": "context-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-context3-start3",
+      "source": "context-3",
+      "target": "start-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-context3-end3",
+      "source": "context-3",
+      "target": "end-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-context3-output3",
+      "source": "context-3",
+      "target": "output-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-start1-output1",
+      "source": "start-1",
+      "target": "output-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-end1-output1",
+      "source": "end-1",
+      "target": "output-1",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-start2-output2",
+      "source": "start-2",
+      "target": "output-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-end2-output2",
+      "source": "end-2",
+      "target": "output-2",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-start3-output3",
+      "source": "start-3",
+      "target": "output-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    },
+    {
+      "id": "e-end3-output3",
+      "source": "end-3",
+      "target": "output-3",
+      "type": "smoothstep",
+      "markerEnd": { "type": "arrowclosed" }
+    }
+  ],
+  "createdAt": "2025-10-29T00:00:00.000Z",
+  "updatedAt": "2025-10-29T00:00:00.000Z"
+}
