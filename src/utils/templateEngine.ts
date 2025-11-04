@@ -70,8 +70,9 @@ export function processTemplate(
       return formatValue(variables[trimmedName]);
     }
 
-    // If variable doesn't exist, keep the placeholder
-    return match;
+    // If variable doesn't exist, replace with empty string instead of keeping placeholder
+    // This prevents literal {{variable}} text from appearing in the output
+    return "";
   });
 
   return result;

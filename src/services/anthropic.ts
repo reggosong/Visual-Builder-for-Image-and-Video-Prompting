@@ -55,13 +55,18 @@ export async function callClaudeStructured<T>(
   prompt: string,
   schema: string
 ): Promise<T> {
-  const fullPrompt = `${prompt}\n\nPlease respond with valid JSON matching this schema: ${schema}\nReturn ONLY the JSON, no markdown or explanations.`;
+  const fullPrompt = `${prompt}
+
+Please respond with a single JSON object that matches this specification:
+${schema}
+
+Output must be valid JSON (double-quoted keys and strings, no trailing commas) with no commentary, prose, or code fences.`;
 
   const client = getAnthropicInstance();
 
   const message = await client.messages.create({
     model: "claude-sonnet-4-5",
-    max_tokens: 1024,
+    max_tokens: 16384,
     messages: [
       {
         role: "user",
@@ -75,20 +80,79 @@ export async function callClaudeStructured<T>(
     throw new Error("Expected text response from Claude");
   }
 
-  const text = content.text;
-
-  // Extract JSON from response (handle markdown code blocks)
-  let jsonText = text.trim();
-  if (jsonText.startsWith("```")) {
-    jsonText = jsonText.replace(/```json?\n?/g, "").replace(/```\n?$/g, "");
+  try {
+    const text = content.text.trim();
+    return parseJsonResponse<T>(text);
+  } catch (error) {
+    console.error("Failed to parse JSON response:", content.text);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to parse structured response from Claude"
+    );
   }
+}
+
+function parseJsonResponse<T>(text: string): T {
+  let normalized = text.trim();
+
+  if (normalized.startsWith("```")) {
+    normalized = normalized.replace(/```json?\n?/gi, "").replace(/```$/gi, "");
+  }
+
+  normalized = normalized.trim();
 
   try {
-    return JSON.parse(jsonText) as T;
-  } catch {
-    console.error("Failed to parse JSON response:", text);
-    throw new Error("Failed to parse structured response from Claude");
+    return JSON.parse(normalized) as T;
+  } catch (error) {
+    console.warn("Initial JSON parse failed, trying to extract {...} block");
+    const firstBrace = normalized.indexOf("{");
+    const lastBrace = normalized.lastIndexOf("}");
+    if (firstBrace >= 0 && lastBrace > firstBrace) {
+      const sliced = normalized.slice(firstBrace, lastBrace + 1);
+      try {
+        return JSON.parse(sliced) as T;
+      } catch (sliceError) {
+        console.warn("Sliced JSON parse failed, attempting repair...");
+        const repaired = repairIncompleteJson(sliced);
+        return JSON.parse(repaired) as T;
+      }
+    }
+    throw error instanceof Error
+      ? error
+      : new Error("Failed to parse structured response from Claude");
   }
+}
+
+function repairIncompleteJson(text: string): string {
+  let repaired = text.trim();
+
+  // Close unclosed strings
+  const unclosedStrings = (repaired.match(/"/g) || []).length % 2 !== 0;
+  if (unclosedStrings) {
+    repaired += '"';
+  }
+
+  // Close unclosed braces
+  const openBraces = (repaired.match(/{/g) || []).length;
+  const closeBraces = (repaired.match(/}/g) || []).length;
+  const bracesDiff = openBraces - closeBraces;
+  if (bracesDiff > 0) {
+    repaired += "  ".repeat(bracesDiff) + "}".repeat(bracesDiff);
+  }
+
+  // Close unclosed brackets
+  const openBrackets = (repaired.match(/\[/g) || []).length;
+  const closeBrackets = (repaired.match(/\]/g) || []).length;
+  const bracketsDiff = openBrackets - closeBrackets;
+  if (bracketsDiff > 0) {
+    repaired += "]".repeat(bracketsDiff);
+  }
+
+  // Remove trailing commas
+  repaired = repaired.replace(/,(\s*[}\]])/g, "$1");
+
+  return repaired;
 }
 
 /**

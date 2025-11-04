@@ -166,10 +166,73 @@ export const StartFrameNode: React.FC<NodeProps> = ({ id, data, selected }) => {
           </div>
         )}
 
+        {/* Accumulated Results - All Images from All Shots */}
+        {nodeData.allImages &&
+          nodeData.allImages.length > 0 &&
+          !nodeData.isLoading && (
+            <div className="space-y-2">
+              <div className="text-xs font-medium text-green-600 dark:text-green-400 px-2">
+                All Start Frames ({nodeData.allImages.length} shots):
+              </div>
+              <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
+                {nodeData.allImages.map((img, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded border border-green-500/20 bg-green-50 dark:bg-green-900/20 p-2 space-y-2"
+                  >
+                    <div className="text-xs font-semibold text-green-700 dark:text-green-300">
+                      Shot {img.shotIndex + 1}
+                    </div>
+                    <img
+                      src={img.url}
+                      alt={`Shot ${img.shotIndex + 1} Start Frame`}
+                      className="w-full h-auto rounded border border-gray-300 dark:border-gray-600"
+                    />
+                    {nodeData.allPrompts && nodeData.allPrompts[idx] && (
+                      <div className="text-xs text-gray-600 dark:text-gray-400 line-clamp-3 p-2 bg-white/50 dark:bg-gray-800/50 rounded">
+                        {nodeData.allPrompts[idx].prompt}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+        {/* Accumulated Character Images */}
+        {nodeData.allCharacterImages &&
+          nodeData.allCharacterImages.length > 0 &&
+          !nodeData.isLoading && (
+            <div className="space-y-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-500/20">
+              <div className="text-xs font-medium text-blue-600 dark:text-blue-400">
+                All Character Images ({nodeData.allCharacterImages.length}):
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                {nodeData.allCharacterImages.map((char, idx) => (
+                  <div key={idx} className="flex flex-col items-center">
+                    <div className="text-xs text-blue-600 dark:text-blue-400 mb-1">
+                      Shot {char.shotIndex + 1}
+                    </div>
+                    <img
+                      src={char.url}
+                      alt={char.name}
+                      className="w-16 h-20 object-cover rounded border border-gray-300 dark:border-gray-600"
+                      title={`${char.name}: ${char.description}`}
+                    />
+                    <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate max-w-[64px]">
+                      {char.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
         {/* Empty State */}
         {!nodeData.generatedImage &&
           !nodeData.generatedPrompt &&
-          !nodeData.isLoading && (
+          !nodeData.isLoading &&
+          (!nodeData.allPrompts || nodeData.allPrompts.length === 0) && (
             <div className="flex flex-col items-center justify-center p-4 text-center">
               <Image size={32} className="text-gray-400 mb-2" />
               <p className="text-xs text-gray-500 dark:text-gray-400">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { NodeProps } from "@xyflow/react";
 import {
   Loader2,
@@ -6,6 +6,8 @@ import {
   ScrollText,
   Video,
   ArrowRightCircle,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 import { BaseNode } from "./BaseNode";
 import type {
@@ -20,6 +22,51 @@ const formatDuration = (seconds?: number) => {
   const secs = Math.round(seconds % 60);
   if (mins <= 0) return `${secs}s`;
   return `${mins}m ${secs}s`;
+};
+
+const PromptDisplay: React.FC<{
+  label: string;
+  prompt: string;
+  icon: React.ReactNode;
+}> = ({ label, prompt, icon }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isLong = prompt.length > 200;
+  const displayPrompt =
+    !isExpanded && isLong ? prompt.slice(0, 200) + "..." : prompt;
+
+  return (
+    <div className="rounded bg-slate-900/80 border border-white/5 p-2">
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-1 text-emerald-200">
+          {icon} {label}
+        </div>
+        {isLong && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center gap-1 text-emerald-300 hover:text-emerald-100 transition-colors text-[10px]"
+          >
+            {isExpanded ? (
+              <>
+                <ChevronDown size={12} /> Collapse
+              </>
+            ) : (
+              <>
+                <ChevronRight size={12} /> Expand
+              </>
+            )}
+          </button>
+        )}
+      </div>
+      <p className="text-white/70 whitespace-pre-wrap break-words">
+        {displayPrompt}
+      </p>
+      {isLong && !isExpanded && (
+        <div className="text-[10px] text-emerald-200/60 mt-1">
+          {prompt.length} characters total
+        </div>
+      )}
+    </div>
+  );
 };
 
 export const SceneShotPlannerNode: React.FC<NodeProps> = ({
@@ -147,61 +194,85 @@ export const SceneShotPlannerNode: React.FC<NodeProps> = ({
           </div>
         )}
 
-        {!isLoading && shotPlan.length > 0 && (
-          <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-            {shotPlan.map((shot) => (
-              <div
-                key={shot.id}
-                className="rounded-lg border border-white/10 bg-slate-800/70 p-3 space-y-2"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold text-white">
-                    {shot.title}
+        {!isLoading &&
+          shotPlan.length > 0 &&
+          (() => {
+            // Group shots by scene
+            const shotsByScene = new Map<number, ShotPlan[]>();
+            shotPlan.forEach((shot) => {
+              const sceneNum = shot.sceneNumber || 1;
+              if (!shotsByScene.has(sceneNum)) {
+                shotsByScene.set(sceneNum, []);
+              }
+              shotsByScene.get(sceneNum)?.push(shot);
+            });
+
+            const sortedScenes = Array.from(shotsByScene.entries()).sort(
+              ([a], [b]) => a - b
+            );
+
+            return (
+              <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
+                {sortedScenes.map(([sceneNum, shots]) => (
+                  <div key={sceneNum} className="space-y-2">
+                    {sortedScenes.length > 1 && (
+                      <div className="flex items-center gap-2 sticky top-0 bg-emerald-600/20 backdrop-blur-sm rounded px-2 py-1 border border-emerald-400/30">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-emerald-500 text-xs font-bold">
+                          {sceneNum}
+                        </span>
+                        <span className="text-xs font-semibold text-emerald-100">
+                          {shots[0]?.sceneTitle || `Scene ${sceneNum}`} -{" "}
+                          {shots.length} shot{shots.length === 1 ? "" : "s"}
+                        </span>
+                      </div>
+                    )}
+                    {shots.map((shot) => (
+                      <div
+                        key={shot.id}
+                        className="rounded-lg border border-white/10 bg-slate-800/70 p-3 space-y-2"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-semibold text-white">
+                            {shot.title}
+                          </div>
+                          <div className="text-[11px] text-emerald-200">
+                            {formatDuration(shot.durationSeconds)}
+                          </div>
+                        </div>
+                        {shot.description && (
+                          <p className="text-xs text-white/70 leading-snug">
+                            {shot.description}
+                          </p>
+                        )}
+                        <div className="grid gap-2 text-[11px]">
+                          <PromptDisplay
+                            label="Start Frame"
+                            prompt={shot.startFramePrompt}
+                            icon={<ArrowRightCircle size={12} />}
+                          />
+                          <PromptDisplay
+                            label="End Frame"
+                            prompt={shot.endFramePrompt}
+                            icon={<ArrowRightCircle size={12} />}
+                          />
+                          <PromptDisplay
+                            label="Video Generation Prompt"
+                            prompt={shot.videoPrompt}
+                            icon={<Play size={12} />}
+                          />
+                        </div>
+                        {shot.cameraNotes && (
+                          <div className="rounded bg-slate-900/70 border border-white/5 p-2 text-[11px] text-emerald-100/80">
+                            Camera notes: {shot.cameraNotes}
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                  <div className="text-[11px] text-emerald-200">
-                    {formatDuration(shot.durationSeconds)}
-                  </div>
-                </div>
-                {shot.description && (
-                  <p className="text-xs text-white/70 leading-snug">
-                    {shot.description}
-                  </p>
-                )}
-                <div className="grid gap-2 text-[11px]">
-                  <div className="rounded bg-slate-900/80 border border-white/5 p-2">
-                    <div className="flex items-center gap-1 text-emerald-200 mb-1">
-                      <ArrowRightCircle size={12} /> Start Frame
-                    </div>
-                    <p className="text-white/70 whitespace-pre-wrap">
-                      {shot.startFramePrompt}
-                    </p>
-                  </div>
-                  <div className="rounded bg-slate-900/80 border border-white/5 p-2">
-                    <div className="flex items-center gap-1 text-emerald-200 mb-1">
-                      <ArrowRightCircle size={12} /> End Frame
-                    </div>
-                    <p className="text-white/70 whitespace-pre-wrap">
-                      {shot.endFramePrompt}
-                    </p>
-                  </div>
-                  <div className="rounded bg-slate-900/80 border border-white/5 p-2">
-                    <div className="flex items-center gap-1 text-emerald-200 mb-1">
-                      <Play size={12} /> Video Generation Prompt
-                    </div>
-                    <p className="text-white/70 whitespace-pre-wrap">
-                      {shot.videoPrompt}
-                    </p>
-                  </div>
-                </div>
-                {shot.cameraNotes && (
-                  <div className="rounded bg-slate-900/70 border border-white/5 p-2 text-[11px] text-emerald-100/80">
-                    Camera notes: {shot.cameraNotes}
-                  </div>
-                )}
+                ))}
               </div>
-            ))}
-          </div>
-        )}
+            );
+          })()}
 
         {!isLoading && shotPlan.length === 0 && (
           <div className="rounded border border-dashed border-emerald-400/40 bg-emerald-500/10 p-4 text-xs text-emerald-100 text-center">

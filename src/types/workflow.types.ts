@@ -3,7 +3,7 @@ import type { Node, Edge } from "@xyflow/react";
 // Node Types
 export type NodeType =
   | "input"
-  | "sceneCollection"
+  | "shotCollection"
   | "sceneShotPlanner"
   | "startFrame"
   | "endFrame"
@@ -55,7 +55,7 @@ export interface ShotInfo {
   cameraMovement?: string;
 }
 
-export interface SceneDefinition {
+export interface ShotDefinition {
   id: string;
   title: string;
   prompt: string;
@@ -71,6 +71,8 @@ export interface ShotPlan {
   durationSeconds?: number;
   cameraNotes?: string;
   inspirationReferences?: string[];
+  sceneNumber?: number;
+  sceneTitle?: string;
 }
 
 // Base Node Data
@@ -89,11 +91,11 @@ export interface InputNodeData extends BaseNodeData {
   prompt: string;
 }
 
-export interface SceneCollectionNodeData extends BaseNodeData {
-  type: "sceneCollection";
-  scenes: SceneDefinition[];
-  activeSceneId?: string | null;
-  autoSplit?: boolean;
+export interface ShotCollectionNodeData extends BaseNodeData {
+  type: "shotCollection";
+  shots: ShotDefinition[];
+  sequentialMode?: boolean; // Output shots one at a time
+  currentShotIndex?: number; // Current shot being processed
 }
 
 export interface StartFrameNodeData extends BaseNodeData {
@@ -108,6 +110,15 @@ export interface StartFrameNodeData extends BaseNodeData {
   isManual: boolean;
   isLoading?: boolean;
   generationStage?: string; // Current stage of generation
+  // Accumulated results across all shots
+  allPrompts?: Array<{ shotIndex: number; prompt: string }>;
+  allImages?: Array<{ shotIndex: number; url: string }>;
+  allCharacterImages?: Array<{
+    shotIndex: number;
+    name: string;
+    url: string;
+    description: string;
+  }>;
 }
 
 export interface EndFrameNodeData extends BaseNodeData {
@@ -120,6 +131,15 @@ export interface EndFrameNodeData extends BaseNodeData {
   isManual: boolean;
   isLoading?: boolean;
   generationStage?: string; // Current stage of generation
+  // Accumulated results across all shots
+  allPrompts?: Array<{ shotIndex: number; prompt: string }>;
+  allImages?: Array<{ shotIndex: number; url: string }>;
+  allVariantImages?: Array<{
+    shotIndex: number;
+    name: string;
+    url: string;
+    prompt: string;
+  }>;
 }
 
 export interface ContinuityPlannerNodeData extends BaseNodeData {
@@ -136,6 +156,13 @@ export interface ContinuityPlannerNodeData extends BaseNodeData {
   variants: Array<{ name: string; description: string; selected: boolean }>;
   objects: Array<{ name: string; description: string; selected: boolean }>;
   isManual: boolean;
+  // Accumulated context from all previous shots
+  accumulatedContext?: {
+    characters: Array<{ name: string; description: string; selected: boolean }>;
+    shotInfo: Array<{ key: string; value: string; selected: boolean }>;
+    variants: Array<{ name: string; description: string; selected: boolean }>;
+    objects: Array<{ name: string; description: string; selected: boolean }>;
+  };
 }
 
 export interface ContextPromptNodeData extends BaseNodeData {
@@ -191,7 +218,7 @@ export interface OutputNodeData extends BaseNodeData {
 
 export type WorkflowNodeData =
   | InputNodeData
-  | SceneCollectionNodeData
+  | ShotCollectionNodeData
   | StartFrameNodeData
   | EndFrameNodeData
   | ContinuityPlannerNodeData

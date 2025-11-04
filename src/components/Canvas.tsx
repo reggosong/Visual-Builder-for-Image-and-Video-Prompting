@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ReactFlow,
   Background,
@@ -22,7 +22,7 @@ import type {
 } from "../types/workflow.types";
 import {
   InputNode,
-  SceneCollectionNode,
+  ShotCollectionNode,
   StartFrameNode,
   SceneShotPlannerNode,
   EndFrameNode,
@@ -35,7 +35,7 @@ import {
 
 const nodeTypes: NodeTypes = {
   input: InputNode,
-  sceneCollection: SceneCollectionNode,
+  shotCollection: ShotCollectionNode,
   sceneShotPlanner: SceneShotPlannerNode,
   startFrame: StartFrameNode,
   endFrame: EndFrameNode,
@@ -60,18 +60,16 @@ const createNodeData = (
     case "input":
       return { ...baseData, prompt: "" } as WorkflowNodeData &
         Record<string, unknown>;
-    case "sceneCollection":
+    case "shotCollection":
       return {
         ...baseData,
-        scenes: [
+        shots: [
           {
-            id: `scene-${Date.now()}`,
-            title: "Scene 1",
+            id: `shot-${Date.now()}`,
+            title: "Shot 1",
             prompt: "",
           },
         ],
-        activeSceneId: null,
-        autoSplit: false,
       } as WorkflowNodeData & Record<string, unknown>;
     case "sceneShotPlanner":
       return {
@@ -160,7 +158,17 @@ const CanvasInner: React.FC = () => {
   } = useWorkflowStore();
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, getZoom } = useReactFlow();
+  const [backgroundGap, setBackgroundGap] = useState(16);
+
+  const calculateBackgroundGap = useCallback((zoom: number) => {
+    const safeZoom = zoom || 1;
+    return Math.min(Math.max(16 / safeZoom, 12), 64);
+  }, []);
+
+  useEffect(() => {
+    setBackgroundGap(calculateBackgroundGap(getZoom()));
+  }, [calculateBackgroundGap, getZoom]);
 
   const handleNodeClick = useCallback(
     (_: React.MouseEvent, node: WorkflowNode) => {
@@ -213,7 +221,7 @@ const CanvasInner: React.FC = () => {
       // Get the label for this node type
       const moduleLabels: Record<NodeType, string> = {
         input: "Text Prompt Input",
-        sceneCollection: "Scene Collection",
+        shotCollection: "Shot Collection",
         sceneShotPlanner: "Scene Shot Planner",
         startFrame: "Start Frame",
         endFrame: "End Frame",
@@ -306,6 +314,9 @@ const CanvasInner: React.FC = () => {
         nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
         fitView
+        onViewportChange={(viewport) =>
+          setBackgroundGap(calculateBackgroundGap(viewport.zoom))
+        }
         className={isDarkMode ? "dark" : ""}
         minZoom={0.01}
         maxZoom={4}
@@ -333,8 +344,9 @@ const CanvasInner: React.FC = () => {
       >
         <Background
           variant={BackgroundVariant.Dots}
-          gap={16}
+          gap={backgroundGap}
           size={1}
+          color={isDarkMode ? "#9ca3af" : "#9ca3af"}
           className="bg-gray-50 dark:bg-gray-900"
         />
         <Controls className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600" />
@@ -346,7 +358,7 @@ const CanvasInner: React.FC = () => {
             switch (node.data.type) {
               case "input":
                 return "#2563eb";
-              case "sceneCollection":
+              case "shotCollection":
                 return "#d97706";
               case "sceneShotPlanner":
                 return "#059669";

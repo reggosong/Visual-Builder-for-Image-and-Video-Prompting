@@ -158,3 +158,16 @@
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* Force interface text and icons to render white */
+html,
+body,
+body * {
+  color: #ffffff !important;
+}
+
+body svg,
+body svg * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}

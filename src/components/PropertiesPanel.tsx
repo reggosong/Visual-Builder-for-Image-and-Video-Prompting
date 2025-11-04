@@ -2,7 +2,7 @@ import React from "react";
 import { useWorkflowStore } from "../store/workflowStore";
 import { X } from "lucide-react";
 import type {
-  SceneCollectionNodeData,
+  ShotCollectionNodeData,
   SceneShotPlannerNodeData,
   ShotPlan,
 } from "../types/workflow.types";
@@ -129,56 +129,41 @@ export const PropertiesPanel: React.FC = () => {
           </div>
         )}
 
-        {nodeData.type === "sceneCollection" &&
+        {nodeData.type === "shotCollection" &&
           (() => {
-            const collectionData = nodeData as SceneCollectionNodeData;
-            const scenes = collectionData.scenes || [];
+            const collectionData = nodeData as ShotCollectionNodeData;
+            const shots = collectionData.shots || [];
             return (
               <div className="space-y-3">
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  Active scene feeds downstream connections. Switch scenes or
-                  edit prompts directly in the node.
+                  All shots are output with "Shot #:" labels for downstream
+                  processing. Edit shots directly in the node.
                 </div>
                 <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {scenes.length > 0 ? (
-                    scenes.map((scene, index) => {
-                      const isActive =
-                        scene.id === collectionData.activeSceneId;
+                  {shots.length > 0 ? (
+                    shots.map((shot, index) => {
                       return (
                         <div
-                          key={scene.id || index}
-                          className={`p-2 rounded border text-xs space-y-2 ${
-                            isActive
-                              ? "border-amber-400 bg-amber-50 dark:bg-amber-900/20"
-                              : "border-gray-300 dark:border-gray-600"
-                          }`}
+                          key={shot.id || index}
+                          className="p-2 rounded border border-gray-300 dark:border-gray-600 text-xs space-y-2"
                         >
-                          <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-amber-500 text-white text-[10px] font-bold">
+                              {index + 1}
+                            </span>
                             <div className="font-semibold text-gray-700 dark:text-gray-200">
-                              {scene.title || `Scene ${index + 1}`}
+                              {shot.title || `Shot ${index + 1}`}
                             </div>
-                            {!isActive && scene.id && (
-                              <button
-                                onClick={() =>
-                                  updateNode(selectedNode.id, {
-                                    activeSceneId: scene.id,
-                                  })
-                                }
-                                className="px-2 py-1 rounded bg-amber-500 text-white text-[11px]"
-                              >
-                                Set Active
-                              </button>
-                            )}
                           </div>
                           <p className="text-gray-600 dark:text-gray-400 line-clamp-3">
-                            {scene.prompt || "No prompt provided."}
+                            {shot.prompt || "No prompt provided."}
                           </p>
                         </div>
                       );
                     })
                   ) : (
                     <div className="p-3 rounded border border-dashed text-center text-xs text-gray-500 dark:text-gray-400">
-                      No scenes defined yet. Use the node UI to add scenes.
+                      No shots defined yet. Use the node UI to add shots.
                     </div>
                   )}
                 </div>
@@ -1289,8 +1274,8 @@ function getHelpText(type: string): string {
   switch (type) {
     case "input":
       return "This is the starting point of your workflow. Enter your base video prompt here.";
-    case "sceneCollection":
-      return "Organize multiple scene prompts and choose which one flows downstream into planning nodes.";
+    case "shotCollection":
+      return "Organize multiple shot prompts for downstream processing into planning nodes.";
     case "sceneShotPlanner":
       return "Automatically breaks a scene into cinematic shots and generates prompts for start, end, and video diffusion.";
     case "startFrame":

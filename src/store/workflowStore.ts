@@ -8,12 +8,14 @@ import type {
   AppSettings,
   MediaItem,
   CustomModuleDefinition,
-  SceneCollectionNodeData,
-  SceneDefinition,
+  ShotCollectionNodeData,
   SceneShotPlannerNodeData,
   ShotPlan,
 } from "../types/workflow.types";
-import { executeWorkflow } from "../utils/dataFlowEngine";
+import {
+  executeWorkflow,
+  executeWorkflowIteratively,
+} from "../utils/dataFlowEngine";
 import { initializeFal } from "../services/fal";
 import { initializeAnthropic } from "../services/anthropic";
 
@@ -347,8 +349,27 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
     const { nodes, edges, settings } = get();
     set({ isRunning: true });
 
+    // Check if sequential mode is enabled
+    const shotCollectionNode = nodes.find(
+      (node) => node.data.type === "shotCollection"
+    );
+    const isSequentialMode =
+      shotCollectionNode &&
+      (shotCollectionNode.data as ShotCollectionNodeData).sequentialMode !==
+        false &&
+      ((shotCollectionNode.data as ShotCollectionNodeData).shots || []).length >
+        0;
+
     console.log("🚀 Running workflow with AI enabled:", settings.useAI);
     console.log("📊 Processing", nodes.length, "nodes");
+    if (isSequentialMode) {
+      const shotCount = (
+        (shotCollectionNode!.data as ShotCollectionNodeData).shots || []
+      ).length;
+      console.log(
+        `🔄 Sequential mode enabled: Processing ${shotCount} shots iteratively`
+      );
+    }
 
     // Services are already initialized with hard-coded API keys on app load
 
@@ -375,7 +396,24 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
     }));
 
     try {
-      const results = await executeWorkflow(nodes, edges, settings.useAI);
+      let results: Map<string, unknown>;
+
+      if (isSequentialMode) {
+        // Use iterative execution with callback to update nodes in real-time
+        results = await executeWorkflowIteratively(
+          nodes,
+          edges,
+          settings.useAI,
+          (nodeId, data) => {
+            // Update node data in real-time during iteration
+            get().updateNode(nodeId, data);
+          }
+        );
+      } else {
+        // Use standard execution
+        results = await executeWorkflow(nodes, edges, settings.useAI);
+      }
+
       set({ workflowData: results, isRunning: false });
 
       // Update nodes with computed values
@@ -384,25 +422,18 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
           const result = results.get(node.id);
           if (result !== undefined) {
             switch (node.data.type) {
-              case "sceneCollection": {
-                const collectionResult = (result || {}) as {
-                  scenes?: SceneDefinition[];
-                  activeSceneId?: string | null;
-                };
-                const existingData = node.data as SceneCollectionNodeData &
+              case "shotCollection": {
+                const existingData = node.data as ShotCollectionNodeData &
                   Record<string, unknown>;
-                const resolvedScenes =
-                  collectionResult.scenes || existingData.scenes;
-                const fallbackSceneId = resolvedScenes[0]?.id ?? null;
+                // IMPORTANT: Don't overwrite shots array during iterative execution
+                // The result only contains the current shot, but we need to keep all shots
+                // So always preserve the existing shots array from node data
                 return {
                   ...node,
                   data: {
                     ...existingData,
-                    scenes: resolvedScenes,
-                    activeSceneId:
-                      collectionResult.activeSceneId ??
-                      existingData.activeSceneId ??
-                      fallbackSceneId,
+                    // Keep the original shots array - don't overwrite from workflow result
+                    shots: existingData.shots,
                     isLoading: false,
                   },
                 };
@@ -433,42 +464,63 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
                   },
                 };
               }
-              case "startFrame":
+              case "startFrame": {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const sfResult = result as any;
                 return {
                   ...node,
                   data: {
                     ...node.data,
-                    generatedPrompt: result?.prompt || "",
-                    generatedImage: result?.image || null,
-                    characterImages: result?.characterImages || [],
-                    extractedValue: result?.prompt || "", // Keep for compatibility
+                    generatedPrompt: sfResult?.prompt || "",
+                    generatedImage: sfResult?.image || null,
+                    characterImages: sfResult?.characterImages || [],
+                    extractedValue: sfResult?.prompt || "", // Keep for compatibility
+                    allPrompts: sfResult?.allPrompts || [],
+                    allImages: sfResult?.allImages || [],
+                    allCharacterImages: sfResult?.allCharacterImages || [],
                     isLoading: false,
                   },
                 };
-              case "endFrame":
+              }
+              case "endFrame": {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const efResult = result as any;
                 return {
                   ...node,
                   data: {
                     ...node.data,
-                    generatedPrompt: result?.prompt || "",
-                    generatedImage: result?.image || null,
-                    variantImages: result?.variantImages || [],
-                    extractedValue: result?.prompt || "", // Keep for compatibility
+                    generatedPrompt: efResult?.prompt || "",
+                    generatedImage: efResult?.image || null,
+                    variantImages: efResult?.variantImages || [],
+                    extractedValue: efResult?.prompt || "", // Keep for compatibility
+                    allPrompts: efResult?.allPrompts || [],
+                    allImages: efResult?.allImages || [],
+                    allVariantImages: efResult?.allVariantImages || [],
                     isLoading: false,
                   },
                 };
-              case "continuityPlanner":
+              }
+              case "continuityPlanner": {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const cpResult = result as any;
                 return {
                   ...node,
                   data: {
                     ...node.data,
-                    characters: result.characters || [],
-                    shotInfo: result.shotInfo || [],
-                    variants: result.variants || [],
-                    objects: result.objects || [],
+                    characters: cpResult?.characters || [],
+                    shotInfo: cpResult?.shotInfo || [],
+                    variants: cpResult?.variants || [],
+                    objects: cpResult?.objects || [],
+                    accumulatedContext: cpResult?.accumulatedContext || {
+                      characters: [],
+                      shotInfo: [],
+                      variants: [],
+                      objects: [],
+                    },
                     isLoading: false,
                   },
                 };
+              }
               case "contextPrompt":
                 return {
                   ...node,

@@ -2,7 +2,8 @@ import type {
   WorkflowNode,
   WorkflowEdge,
   StartFrameNodeData,
-  SceneCollectionNodeData,
+  EndFrameNodeData,
+  ShotCollectionNodeData,
   SceneShotPlannerNodeData,
   ShotPlan,
 } from "../types/workflow.types";
@@ -18,6 +19,12 @@ interface ProcessedData {
   output: unknown;
   success: boolean;
   error?: string;
+}
+
+interface ExecutionContext {
+  currentShotIndex?: number;
+  totalShots?: number;
+  isIterativeMode?: boolean;
 }
 
 /**
@@ -99,7 +106,8 @@ async function processNode(
   inputs: Map<string, unknown>,
   edges: WorkflowEdge[],
   nodes: WorkflowNode[],
-  useAI: boolean = false
+  useAI: boolean = false,
+  context: ExecutionContext = {}
 ): Promise<ProcessedData> {
   const nodeData = node.data;
 
@@ -113,23 +121,58 @@ async function processNode(
         };
       }
 
-      case "sceneCollection": {
-        const collectionData = node.data as SceneCollectionNodeData;
-        const scenes = collectionData.scenes || [];
-        const activeSceneId =
-          collectionData.activeSceneId || scenes[0]?.id || null;
-        const activeScene =
-          scenes.find((scene) => scene.id === activeSceneId) || null;
+      case "shotCollection": {
+        const collectionData = node.data as ShotCollectionNodeData;
+        const shots = collectionData.shots || [];
+
+        // Check if we're in iterative mode and should output only current shot
+        if (context.isIterativeMode && context.currentShotIndex !== undefined) {
+          const currentShot = shots[context.currentShotIndex];
+          if (!currentShot) {
+            return {
+              nodeId: node.id,
+              output: {
+                shots: [],
+                formattedShots: "",
+                shotCount: 0,
+                currentShotIndex: context.currentShotIndex,
+                totalShots: shots.length,
+              },
+              success: false,
+              error: `Shot ${context.currentShotIndex + 1} not found`,
+            };
+          }
+
+          const shotNumber = context.currentShotIndex + 1;
+          const formattedShot = `Shot ${shotNumber}: ${currentShot.prompt}`;
+
+          return {
+            nodeId: node.id,
+            output: {
+              shots: [currentShot],
+              formattedShots: formattedShot,
+              shotCount: 1,
+              currentShotIndex: context.currentShotIndex,
+              totalShots: shots.length,
+            },
+            success: true,
+          };
+        }
+
+        // Default behavior: output all shots at once
+        const formattedShots = shots
+          .map((shot, index) => {
+            const shotNumber = index + 1;
+            return `Shot ${shotNumber}: ${shot.prompt}`;
+          })
+          .join("\n\n");
 
         return {
           nodeId: node.id,
           output: {
-            scenes,
-            activeSceneId,
-            activeScene,
-            activeScenePrompt: activeScene?.prompt || "",
-            activeSceneTitle: activeScene?.title || "",
-            sceneCount: scenes.length,
+            shots,
+            formattedShots,
+            shotCount: shots.length,
           },
           success: true,
         };
@@ -139,64 +182,69 @@ async function processNode(
         const plannerData = node.data as SceneShotPlannerNodeData;
         const incomingEdges = getIncomingEdges(node.id, edges);
 
-        let sceneInput = (plannerData.sceneOverride || "").trim();
-        let sceneTitle: string | undefined;
-        let sceneId: string | undefined;
+        let shotInput = (plannerData.sceneOverride || "").trim();
+        let shots: Array<{ title: string; prompt: string }> = [];
 
-        if (!sceneInput) {
+        // Parse input - either from override or incoming edges
+        if (!shotInput) {
           for (const edge of incomingEdges) {
             const value = inputs.get(edge.source);
             if (!value) continue;
 
-            if (typeof value === "string" && value.trim()) {
-              sceneInput = value.trim();
-              const sourceNode = nodes.find((n) => n.id === edge.source);
-              if (sourceNode?.data?.label) {
-                sceneTitle = sourceNode.data.label as string;
-              }
-              break;
-            }
-
+            // Check if this is formatted shots from ShotCollection
             if (typeof value === "object" && value !== null) {
               const candidate = value as {
-                activeScenePrompt?: string;
-                activeSceneTitle?: string;
-                activeSceneId?: string;
+                formattedShots?: string;
+                shots?: Array<{ title: string; prompt: string }>;
                 prompt?: string;
-                title?: string;
-                id?: string;
               };
 
-              if (candidate.activeScenePrompt) {
-                sceneInput = String(candidate.activeScenePrompt).trim();
-                sceneTitle = candidate.activeSceneTitle || sceneTitle;
-                sceneId = candidate.activeSceneId || sceneId;
-                if (sceneInput) break;
+              if (candidate.formattedShots) {
+                shotInput = String(candidate.formattedShots).trim();
+                shots = candidate.shots || [];
+                break;
               }
 
               if (candidate.prompt) {
-                sceneInput = String(candidate.prompt).trim();
-                sceneTitle = candidate.title || sceneTitle;
-                sceneId = candidate.id || sceneId;
-                if (sceneInput) break;
+                shotInput = String(candidate.prompt).trim();
+                break;
               }
+            }
+
+            if (typeof value === "string" && value.trim()) {
+              shotInput = value.trim();
+              break;
             }
           }
         }
 
-        if (!sceneInput) {
+        // If override is used, try to parse multiple shots
+        if (shotInput && shotInput.includes("Shot 1:")) {
+          const shotMatches = shotInput.matchAll(
+            /Shot (\d+):\s*([\s\S]*?)(?=Shot \d+:|$)/g
+          );
+          shots = Array.from(shotMatches).map((match) => ({
+            title: `Shot ${match[1]}`,
+            prompt: match[2].trim(),
+          }));
+        } else if (shotInput && shots.length === 0) {
+          // Single shot input
+          shots = [{ title: "Shot 1", prompt: shotInput }];
+        }
+
+        if (!shotInput || shots.length === 0) {
           return {
             nodeId: node.id,
             output: {
               shotPlan: [],
               summary: "",
               totalDurationSeconds: 0,
-              lastSceneTitle: sceneTitle || "",
-              lastSceneId: sceneId || "",
+              lastSceneTitle: "",
+              lastSceneId: "",
               lastScenePrompt: "",
             },
             success: false,
-            error: "No scene input received",
+            error: "No shot input received",
           };
         }
 
@@ -204,27 +252,31 @@ async function processNode(
         const includeTransitions = plannerData.includeTransitions !== false;
 
         if (!useAI) {
-          const fallbackShot: ShotPlan = {
-            id: "manual-shot-1",
-            title: "Single Shot",
+          const fallbackPlans: ShotPlan[] = shots.map((shot, index) => ({
+            id: `manual-shot-${index + 1}`,
+            title: `${shot.title} - Expanded`,
             description:
-              "Fallback plan generated without AI. Enable AI to get full coverage.",
-            startFramePrompt: sceneInput,
-            endFramePrompt: sceneInput,
-            videoPrompt: sceneInput,
+              "Fallback plan generated without AI. Enable AI to get full shot breakdown.",
+            startFramePrompt: shot.prompt,
+            endFramePrompt: shot.prompt,
+            videoPrompt: shot.prompt,
             durationSeconds: 6,
-          };
+            sceneNumber: index + 1,
+            sceneTitle: shot.title,
+          }));
 
           return {
             nodeId: node.id,
             output: {
-              shotPlan: [fallbackShot],
-              summary:
-                "AI disabled: provided a single-shot plan mirroring the scene description.",
-              totalDurationSeconds: fallbackShot.durationSeconds,
-              lastSceneTitle: sceneTitle || "Scene",
-              lastSceneId: sceneId || "",
-              lastScenePrompt: sceneInput,
+              shotPlan: fallbackPlans,
+              summary: `AI disabled: provided ${shots.length} single-shot plan(s) mirroring the input description(s).`,
+              totalDurationSeconds: fallbackPlans.reduce(
+                (sum, s) => sum + (s.durationSeconds || 0),
+                0
+              ),
+              lastSceneTitle: shots[shots.length - 1]?.title || "",
+              lastSceneId: "",
+              lastScenePrompt: shots[shots.length - 1]?.prompt || "",
             },
             success: true,
           };
@@ -235,11 +287,13 @@ async function processNode(
             "../services/anthropic"
           );
 
-          const planningPrompt = `You are a senior film director tasked with creating a shot plan for a single scene.
+          const planningPrompt = `You are a senior film director tasked with expanding ${
+            shots.length
+          } shot prompt(s) into detailed, production-ready specifications.
 
-Scene description:
+${shots.length === 1 ? "Shot description:" : "Shot descriptions:"}
 """
-${sceneInput}
+${shotInput}
 """
 
 Planning style: ${planningStyle}.
@@ -247,7 +301,7 @@ Include transitional bridge shots between major beats: ${
             includeTransitions ? "yes" : "no"
           }.
 
-Produce a cinematic shot breakdown that covers the full arc of the scene. Each shot needs:
+For each shot prompt provided, expand it into a detailed cinematic specification. Each expanded shot needs:
 1. A descriptive title (avoid generic names)
 2. A vivid description of the visual moment
 3. Estimated duration in seconds (4-12 seconds typical)
@@ -255,8 +309,15 @@ Produce a cinematic shot breakdown that covers the full arc of the scene. Each s
 5. An end frame prompt that resolves the shot
 6. A video diffusion prompt summarizing motion and continuity for that shot
 7. Optional camera notes (movement, lens, transitions)
+8. The shot number this belongs to (1, 2, 3, etc.) - corresponding to the input shot numbers
 
-Plan just enough shots to cover the entire scene without redundancy. Make sure the prompts stay consistent with characters, setting, and tone.`;
+${
+  shots.length > 1
+    ? "IMPORTANT: Expand ALL shot prompts. The shots should flow continuously as a sequence, maintaining visual and narrative continuity. You may add transition shots between the main shots if needed."
+    : ""
+}
+
+Expand the shots with rich detail while staying true to the original intent. Ensure consistency in characters, setting, and tone across all shots.`;
 
           const planningSchema = `{
   "summary": "string",
@@ -270,7 +331,8 @@ Plan just enough shots to cover the entire scene without redundancy. Make sure t
       "startFramePrompt": "string",
       "endFramePrompt": "string",
       "videoPrompt": "string",
-      "cameraNotes": "string"
+      "cameraNotes": "string",
+      "sceneNumber": 1
     }
   ]
 }`;
@@ -287,6 +349,7 @@ Plan just enough shots to cover the entire scene without redundancy. Make sure t
               endFramePrompt?: string;
               videoPrompt?: string;
               cameraNotes?: string;
+              sceneNumber?: number | string;
             }>;
           }>(planningPrompt, planningSchema);
 
@@ -303,15 +366,39 @@ Plan just enough shots to cover the entire scene without redundancy. Make sure t
               return Number.isFinite(parsed) ? parsed : undefined;
             })();
 
+            const sceneNumber = (() => {
+              if (typeof shot.sceneNumber === "number") {
+                return shot.sceneNumber;
+              }
+              const parsed = parseInt(String(shot.sceneNumber || ""), 10);
+              return Number.isFinite(parsed) ? parsed : 1;
+            })();
+
+            const sceneTitle =
+              shots[sceneNumber - 1]?.title || `Shot ${sceneNumber}`;
+
+            const startFramePrompt = shot.startFramePrompt?.trim() || "";
+            const endFramePrompt = shot.endFramePrompt?.trim() || "";
+            const videoPrompt = shot.videoPrompt?.trim() || "";
+
+            // Debug log for prompt lengths
+            console.log(
+              `Shot ${index + 1} prompt lengths - Start: ${
+                startFramePrompt.length
+              }, End: ${endFramePrompt.length}, Video: ${videoPrompt.length}`
+            );
+
             return {
               id: shot.id?.trim() || `shot-${index + 1}`,
               title: shot.title?.trim() || `Shot ${index + 1}`,
               description: shot.description?.trim() || "",
               durationSeconds: numericDuration,
-              startFramePrompt: shot.startFramePrompt?.trim() || "",
-              endFramePrompt: shot.endFramePrompt?.trim() || "",
-              videoPrompt: shot.videoPrompt?.trim() || "",
+              startFramePrompt,
+              endFramePrompt,
+              videoPrompt,
               cameraNotes: shot.cameraNotes?.trim() || undefined,
+              sceneNumber,
+              sceneTitle,
             };
           });
 
@@ -337,27 +424,29 @@ Plan just enough shots to cover the entire scene without redundancy. Make sure t
               shotPlan: normalizedShots,
               summary:
                 planResult.summary?.trim() ||
-                `Planned ${normalizedShots.length} shot${
+                `Expanded ${shots.length} shot prompt${
+                  shots.length === 1 ? "" : "s"
+                } into ${normalizedShots.length} detailed shot${
                   normalizedShots.length === 1 ? "" : "s"
-                } covering the full scene.`,
+                }.`,
               totalDurationSeconds: totalDuration,
-              lastSceneTitle: sceneTitle || "Scene",
-              lastSceneId: sceneId || "",
-              lastScenePrompt: sceneInput,
+              lastSceneTitle: shots[shots.length - 1]?.title || "",
+              lastSceneId: "",
+              lastScenePrompt: shots[shots.length - 1]?.prompt || "",
             },
             success: true,
           };
         } catch (error) {
-          console.error("❌ Scene shot planning failed:", error);
+          console.error("❌ Shot planning failed:", error);
           return {
             nodeId: node.id,
             output: {
               shotPlan: [],
               summary: "",
               totalDurationSeconds: 0,
-              lastSceneTitle: sceneTitle || "Scene",
-              lastSceneId: sceneId || "",
-              lastScenePrompt: sceneInput,
+              lastSceneTitle: shots[shots.length - 1]?.title || "",
+              lastSceneId: "",
+              lastScenePrompt: shots[shots.length - 1]?.prompt || "",
             },
             success: false,
             error:
@@ -526,9 +615,9 @@ Return ONLY the complete image generation prompt, no explanations.`;
           });
 
           // Filter output based on selection settings
-          const nodeData = node.data as StartFrameNodeData;
-          const selectedCharacters = nodeData.selectedCharacters || [];
-          const outputStartFrame = nodeData.outputStartFrame !== false; // Default to true
+          const sfNodeData = node.data as StartFrameNodeData;
+          const selectedCharacters = sfNodeData.selectedCharacters || [];
+          const outputStartFrame = sfNodeData.outputStartFrame !== false; // Default to true
 
           // Filter character images based on selection
           const outputCharacters =
@@ -538,12 +627,50 @@ Return ONLY the complete image generation prompt, no explanations.`;
                 )
               : characterImages; // If nothing selected, output all
 
+          // Accumulate results if in iterative mode
+          let allPrompts = sfNodeData.allPrompts || [];
+          let allImages = sfNodeData.allImages || [];
+          let allCharacterImages = sfNodeData.allCharacterImages || [];
+
+          if (
+            context.isIterativeMode &&
+            context.currentShotIndex !== undefined
+          ) {
+            // Add current shot results to accumulated arrays
+            allPrompts = [
+              ...allPrompts,
+              { shotIndex: context.currentShotIndex, prompt: generatedPrompt },
+            ];
+
+            if (outputStartFrame && imageUrl) {
+              allImages = [
+                ...allImages,
+                { shotIndex: context.currentShotIndex, url: imageUrl },
+              ];
+            }
+
+            outputCharacters.forEach((char) => {
+              allCharacterImages = [
+                ...allCharacterImages,
+                {
+                  shotIndex: context.currentShotIndex!,
+                  name: char.name,
+                  url: char.url,
+                  description: char.description,
+                },
+              ];
+            });
+          }
+
           return {
             nodeId: node.id,
             output: {
               prompt: generatedPrompt,
               image: outputStartFrame ? imageUrl : null,
               characterImages: outputCharacters,
+              allPrompts,
+              allImages,
+              allCharacterImages,
             },
             success: true,
           };
@@ -702,12 +829,49 @@ Return ONLY the complete image generation prompt, no explanations.`;
             timestamp: Date.now(),
           });
 
+          // Accumulate results if in iterative mode
+          const efNodeData = node.data as EndFrameNodeData;
+          let allPrompts = efNodeData.allPrompts || [];
+          let allImages = efNodeData.allImages || [];
+          let allVariantImages = efNodeData.allVariantImages || [];
+
+          if (
+            context.isIterativeMode &&
+            context.currentShotIndex !== undefined
+          ) {
+            // Add current shot results to accumulated arrays
+            allPrompts = [
+              ...allPrompts,
+              { shotIndex: context.currentShotIndex, prompt: generatedPrompt },
+            ];
+
+            allImages = [
+              ...allImages,
+              { shotIndex: context.currentShotIndex, url: imageUrl },
+            ];
+
+            variantImages.forEach((variant) => {
+              allVariantImages = [
+                ...allVariantImages,
+                {
+                  shotIndex: context.currentShotIndex!,
+                  name: variant.name,
+                  url: variant.url,
+                  prompt: variant.prompt,
+                },
+              ];
+            });
+          }
+
           return {
             nodeId: node.id,
             output: {
               prompt: generatedPrompt,
               image: imageUrl,
               variantImages: variantImages,
+              allPrompts,
+              allImages,
+              allVariantImages,
             },
             success: true,
           };
@@ -732,6 +896,34 @@ Return ONLY the complete image generation prompt, no explanations.`;
           incomingEdges.length > 0 ? inputs.get(incomingEdges[0].source) : "";
         const inputText = typeof rawInput === "string" ? rawInput : "";
 
+        // Get accumulated context from previous iterations
+        const cpNodeData = nodeData as typeof nodeData & {
+          accumulatedContext?: {
+            characters: Array<{
+              name: string;
+              description: string;
+              selected: boolean;
+            }>;
+            shotInfo: Array<{ key: string; value: string; selected: boolean }>;
+            variants: Array<{
+              name: string;
+              description: string;
+              selected: boolean;
+            }>;
+            objects: Array<{
+              name: string;
+              description: string;
+              selected: boolean;
+            }>;
+          };
+        };
+        const accumulatedContext = cpNodeData.accumulatedContext || {
+          characters: [],
+          shotInfo: [],
+          variants: [],
+          objects: [],
+        };
+
         if (!useAI || !inputText) {
           return {
             nodeId: node.id,
@@ -740,6 +932,7 @@ Return ONLY the complete image generation prompt, no explanations.`;
               shotInfo: nodeData.shotInfo || [],
               variants: nodeData.variants || [],
               objects: nodeData.objects || [],
+              accumulatedContext,
             },
             success: true,
           };
@@ -750,7 +943,12 @@ Return ONLY the complete image generation prompt, no explanations.`;
             "../services/anthropic"
           );
 
-          console.log("🎬 Analyzing continuity for later shots...");
+          const shotContext = context.isIterativeMode
+            ? ` (Shot ${(context.currentShotIndex || 0) + 1} of ${
+                context.totalShots || 1
+              })`
+            : "";
+          console.log(`🎬 Analyzing continuity for shot${shotContext}...`);
 
           // Build prompt based on selected categories
           const categoriesToExtract = [];
@@ -779,19 +977,55 @@ Return ONLY the complete image generation prompt, no explanations.`;
                 shotInfo: [],
                 variants: [],
                 objects: [],
+                accumulatedContext,
               },
               success: true,
             };
           }
 
+          // Include context from previous shots if in iterative mode
+          const previousContextPrompt =
+            context.isIterativeMode && (context.currentShotIndex || 0) > 0
+              ? `\n\nPreviously established continuity elements from earlier shots:\n${
+                  accumulatedContext.characters.length > 0
+                    ? `Characters: ${accumulatedContext.characters
+                        .map((c) => `${c.name} - ${c.description}`)
+                        .join("; ")}\n`
+                    : ""
+                }${
+                  accumulatedContext.shotInfo.length > 0
+                    ? `Shot Details: ${accumulatedContext.shotInfo
+                        .map((s) => `${s.key}: ${s.value}`)
+                        .join("; ")}\n`
+                    : ""
+                }${
+                  accumulatedContext.variants.length > 0
+                    ? `Variants: ${accumulatedContext.variants
+                        .map((v) => `${v.name} - ${v.description}`)
+                        .join("; ")}\n`
+                    : ""
+                }${
+                  accumulatedContext.objects.length > 0
+                    ? `Objects: ${accumulatedContext.objects
+                        .map((o) => `${o.name} - ${o.description}`)
+                        .join("; ")}\n`
+                    : ""
+                }
+IMPORTANT: Maintain consistency with these established elements and add any NEW elements from the current shot.`
+              : "";
+
           const continuityPrompt = `Analyze this video scene prompt and extract key continuity elements that MUST be maintained in later shots of the same scene:
 
-"${inputText}"
+"${inputText}"${previousContextPrompt}
 
 Extract:
 ${categoriesToExtract.join("\n")}
 
-For each category, provide detailed descriptions to ensure consistency across shots.`;
+For each category, provide detailed descriptions to ensure consistency across shots.${
+            previousContextPrompt
+              ? " Include both previously established elements and any new elements from this shot."
+              : ""
+          }`;
 
           // Build schema dynamically based on selected categories
           const schemaFields = [];
@@ -822,7 +1056,7 @@ For each category, provide detailed descriptions to ensure consistency across sh
           }>(continuityPrompt, schema);
 
           // Add selected: true to all items by default
-          const output = {
+          const currentOutput = {
             characters: nodeData.extractCharacters
               ? (result.characters || []).map((c) => ({
                   ...c,
@@ -840,13 +1074,63 @@ For each category, provide detailed descriptions to ensure consistency across sh
               : [],
           };
 
+          // Merge with accumulated context (deduplicating by name/key)
+          const mergeItems = <T extends { name?: string; key?: string }>(
+            accumulated: T[],
+            current: T[]
+          ): T[] => {
+            const map = new Map<string, T>();
+
+            // Add accumulated items first
+            accumulated.forEach((item) => {
+              const id = item.name || item.key || "";
+              if (id) map.set(id, item);
+            });
+
+            // Add or update with current items
+            current.forEach((item) => {
+              const id = item.name || item.key || "";
+              if (id) map.set(id, item);
+            });
+
+            return Array.from(map.values());
+          };
+
+          const updatedAccumulatedContext = {
+            characters: mergeItems(
+              accumulatedContext.characters,
+              currentOutput.characters
+            ),
+            shotInfo: mergeItems(
+              accumulatedContext.shotInfo,
+              currentOutput.shotInfo
+            ),
+            variants: mergeItems(
+              accumulatedContext.variants,
+              currentOutput.variants
+            ),
+            objects: mergeItems(
+              accumulatedContext.objects,
+              currentOutput.objects
+            ),
+          };
+
           console.log(
-            `✅ Continuity analysis complete: ${output.characters.length} chars, ${output.shotInfo.length} shot details, ${output.variants.length} variants, ${output.objects.length} objects`
+            `✅ Continuity analysis complete: ${currentOutput.characters.length} chars, ${currentOutput.shotInfo.length} shot details, ${currentOutput.variants.length} variants, ${currentOutput.objects.length} objects`
           );
+
+          if (context.isIterativeMode) {
+            console.log(
+              `📚 Accumulated context: ${updatedAccumulatedContext.characters.length} total chars, ${updatedAccumulatedContext.shotInfo.length} total shot details`
+            );
+          }
 
           return {
             nodeId: node.id,
-            output,
+            output: {
+              ...currentOutput,
+              accumulatedContext: updatedAccumulatedContext,
+            },
             success: true,
           };
         } catch (error) {
@@ -858,6 +1142,7 @@ For each category, provide detailed descriptions to ensure consistency across sh
               shotInfo: [],
               variants: [],
               objects: [],
+              accumulatedContext,
             },
             success: false,
             error:
@@ -880,6 +1165,17 @@ For each category, provide detailed descriptions to ensure consistency across sh
           if (value !== undefined && sourceNode) {
             // Map node outputs to template variable names based on node type
             switch (sourceNode.data.type) {
+              case "shotCollection":
+                // Extract formattedShots string from shot collection output
+                if (typeof value === "object" && value !== null) {
+                  const shotValue = value as {
+                    formattedShots?: string;
+                    shots?: Array<{ title: string; prompt: string }>;
+                  };
+                  // Map the formatted shot text to "input" variable
+                  contextInputs.input = shotValue.formattedShots || "";
+                }
+                break;
               case "continuityPlanner":
                 // Extract selected items from continuity planner
                 if (typeof value === "object" && value !== null) {
@@ -1134,16 +1430,82 @@ For each category, provide detailed descriptions to ensure consistency across sh
           if (typeof value === "string") {
             allInputs.push(value);
           } else if (value && typeof value === "object") {
-            // Handle complex objects from startFrame/endFrame nodes
-            if ("prompt" in value && typeof value.prompt === "string") {
+            // Handle accumulated results from iterative execution
+            if ("allPrompts" in value && Array.isArray(value.allPrompts)) {
+              const prompts = (
+                value.allPrompts as Array<{ shotIndex: number; prompt: string }>
+              )
+                .map((p) => `Shot ${p.shotIndex + 1} Prompt: ${p.prompt}`)
+                .join("\n\n");
+              if (prompts) {
+                allInputs.push(`All Prompts:\n${prompts}`);
+              }
+            }
+
+            if ("allImages" in value && Array.isArray(value.allImages)) {
+              const images = (
+                value.allImages as Array<{ shotIndex: number; url: string }>
+              )
+                .map((img) => `Shot ${img.shotIndex + 1} Image: ${img.url}`)
+                .join("\n");
+              if (images) {
+                allInputs.push(`All Images:\n${images}`);
+              }
+            }
+
+            if (
+              "allCharacterImages" in value &&
+              Array.isArray(value.allCharacterImages)
+            ) {
+              const chars = (
+                value.allCharacterImages as Array<{
+                  shotIndex: number;
+                  name: string;
+                  url: string;
+                  description: string;
+                }>
+              )
+                .map((c) => `Shot ${c.shotIndex + 1} - ${c.name}: ${c.url}`)
+                .join("\n");
+              if (chars) {
+                allInputs.push(`All Character Images:\n${chars}`);
+              }
+            }
+
+            if (
+              "allVariantImages" in value &&
+              Array.isArray(value.allVariantImages)
+            ) {
+              const variants = (
+                value.allVariantImages as Array<{
+                  shotIndex: number;
+                  name: string;
+                  url: string;
+                  prompt: string;
+                }>
+              )
+                .map((v) => `Shot ${v.shotIndex + 1} - ${v.name}: ${v.url}`)
+                .join("\n");
+              if (variants) {
+                allInputs.push(`All Variant Images:\n${variants}`);
+              }
+            }
+
+            // Handle current shot results (non-accumulated)
+            if (
+              "prompt" in value &&
+              typeof value.prompt === "string" &&
+              !("allPrompts" in value)
+            ) {
               allInputs.push(`Prompt: ${value.prompt}`);
             }
-            if ("image" in value && value.image) {
+            if ("image" in value && value.image && !("allImages" in value)) {
               allInputs.push(`Image: ${value.image}`);
             }
             if (
               "characterImages" in value &&
-              Array.isArray(value.characterImages)
+              Array.isArray(value.characterImages) &&
+              !("allCharacterImages" in value)
             ) {
               const chars = value.characterImages
                 .map(
@@ -1156,7 +1518,8 @@ For each category, provide detailed descriptions to ensure consistency across sh
             }
             if (
               "variantImages" in value &&
-              Array.isArray(value.variantImages)
+              Array.isArray(value.variantImages) &&
+              !("allVariantImages" in value)
             ) {
               const variants = value.variantImages
                 .map(
@@ -1204,13 +1567,21 @@ For each category, provide detailed descriptions to ensure consistency across sh
 export async function executeWorkflow(
   nodes: WorkflowNode[],
   edges: WorkflowEdge[],
-  useAI: boolean = false
+  useAI: boolean = false,
+  context: ExecutionContext = {}
 ): Promise<Map<string, unknown>> {
   const sortedNodes = topologicalSort(nodes, edges);
   const results = new Map<string, unknown>();
 
   for (const node of sortedNodes) {
-    const processed = await processNode(node, results, edges, nodes, useAI);
+    const processed = await processNode(
+      node,
+      results,
+      edges,
+      nodes,
+      useAI,
+      context
+    );
     if (processed.success) {
       results.set(node.id, processed.output);
     } else {
@@ -1220,6 +1591,185 @@ export async function executeWorkflow(
   }
 
   return results;
+}
+
+/**
+ * Execute workflow iteratively for each shot in the shot collection
+ */
+export async function executeWorkflowIteratively(
+  nodes: WorkflowNode[],
+  edges: WorkflowEdge[],
+  useAI: boolean = false,
+  updateNodeCallback?: (nodeId: string, data: Partial<unknown>) => void
+): Promise<Map<string, unknown>> {
+  // Find shot collection node
+  const shotCollectionNode = nodes.find(
+    (node) => node.data.type === "shotCollection"
+  );
+
+  if (!shotCollectionNode) {
+    console.warn("No shot collection node found, running workflow normally");
+    return executeWorkflow(nodes, edges, useAI);
+  }
+
+  const shotCollectionData = shotCollectionNode.data as ShotCollectionNodeData;
+  const shots = shotCollectionData.shots || [];
+
+  if (shots.length === 0) {
+    console.warn("Shot collection is empty, running workflow normally");
+    return executeWorkflow(nodes, edges, useAI);
+  }
+
+  console.log(
+    `🎬 Starting iterative workflow execution for ${shots.length} shots...`
+  );
+
+  // We'll accumulate state in the node data structures as we iterate
+  const finalResults = new Map<string, unknown>();
+
+  for (let shotIndex = 0; shotIndex < shots.length; shotIndex++) {
+    console.log(`\n🎯 Processing shot ${shotIndex + 1} of ${shots.length}...`);
+
+    const context: ExecutionContext = {
+      currentShotIndex: shotIndex,
+      totalShots: shots.length,
+      isIterativeMode: true,
+    };
+
+    // Update nodes with accumulated state from previous iterations
+    const updatedNodes = nodes.map((node) => {
+      // Get previous results for this node
+      const prevResult = finalResults.get(node.id);
+
+      if (!prevResult || typeof prevResult !== "object") {
+        return node;
+      }
+
+      // Update node data with accumulated context
+      if (
+        node.data.type === "continuityPlanner" &&
+        "accumulatedContext" in prevResult
+      ) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const cpRes = prevResult as any;
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            accumulatedContext: cpRes.accumulatedContext,
+          },
+        };
+      }
+
+      if (node.data.type === "startFrame" && "allPrompts" in prevResult) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const sfRes = prevResult as any;
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            allPrompts: sfRes.allPrompts,
+            allImages: sfRes.allImages,
+            allCharacterImages: sfRes.allCharacterImages,
+          },
+        };
+      }
+
+      if (node.data.type === "endFrame" && "allPrompts" in prevResult) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const efRes = prevResult as any;
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            allPrompts: efRes.allPrompts,
+            allImages: efRes.allImages,
+            allVariantImages: efRes.allVariantImages,
+          },
+        };
+      }
+
+      return node;
+    });
+
+    // Execute workflow for this shot
+    const iterationResults = await executeWorkflow(
+      updatedNodes,
+      edges,
+      useAI,
+      context
+    );
+
+    // Update final results with this iteration's results
+    iterationResults.forEach((value, key) => {
+      finalResults.set(key, value);
+    });
+
+    // Update the nodes with new accumulated state via callback
+    if (updateNodeCallback) {
+      // Update continuity planner
+      const cpNode = nodes.find((n) => n.data.type === "continuityPlanner");
+      if (cpNode) {
+        const cpResult = iterationResults.get(cpNode.id);
+        if (
+          cpResult &&
+          typeof cpResult === "object" &&
+          "accumulatedContext" in cpResult
+        ) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const cpRes = cpResult as any;
+          updateNodeCallback(cpNode.id, {
+            accumulatedContext: cpRes.accumulatedContext,
+            characters: cpRes.characters,
+            shotInfo: cpRes.shotInfo,
+            variants: cpRes.variants,
+            objects: cpRes.objects,
+          });
+        }
+      }
+
+      // Update start frame
+      const sfNode = nodes.find((n) => n.data.type === "startFrame");
+      if (sfNode) {
+        const sfResult = iterationResults.get(sfNode.id);
+        if (sfResult && typeof sfResult === "object") {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const sfRes = sfResult as any;
+          updateNodeCallback(sfNode.id, {
+            allPrompts: sfRes.allPrompts,
+            allImages: sfRes.allImages,
+            allCharacterImages: sfRes.allCharacterImages,
+            generatedPrompt: sfRes.prompt,
+            generatedImage: sfRes.image,
+            characterImages: sfRes.characterImages,
+          });
+        }
+      }
+
+      // Update end frame
+      const efNode = nodes.find((n) => n.data.type === "endFrame");
+      if (efNode) {
+        const efResult = iterationResults.get(efNode.id);
+        if (efResult && typeof efResult === "object") {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const efRes = efResult as any;
+          updateNodeCallback(efNode.id, {
+            allPrompts: efRes.allPrompts,
+            allImages: efRes.allImages,
+            allVariantImages: efRes.allVariantImages,
+            generatedPrompt: efRes.prompt,
+            generatedImage: efRes.image,
+            variantImages: efRes.variantImages,
+          });
+        }
+      }
+    }
+  }
+
+  console.log(
+    `\n✅ Completed iterative workflow execution for all ${shots.length} shots`
+  );
+  return finalResults;
 }
 
 /**

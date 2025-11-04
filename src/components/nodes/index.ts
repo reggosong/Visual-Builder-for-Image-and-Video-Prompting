@@ -1,5 +1,5 @@
 export { InputNode } from "./InputNode";
-export { SceneCollectionNode } from "./SceneCollectionNode";
+export { ShotCollectionNode } from "./ShotCollectionNode";
 export { StartFrameNode } from "./StartFrameNode";
 export { SceneShotPlannerNode } from "./SceneShotPlannerNode";
 export { EndFrameNode } from "./EndFrameNode";

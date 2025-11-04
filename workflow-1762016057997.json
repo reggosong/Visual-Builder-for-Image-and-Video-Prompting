@@ -1,0 +1,45 @@
+{
+  "version": "1.0.0",
+  "name": "Video Prompt Workflow",
+  "description": "Exported workflow",
+  "nodes": [
+    {
+      "id": "shotCollection-1762014845895",
+      "type": "shotCollection",
+      "position": {
+        "x": 465.8952580155012,
+        "y": 1081.396048802387
+      },
+      "data": {
+        "label": "Shot Collection",
+        "type": "shotCollection",
+        "shots": [
+          {
+            "id": "shot-1762014845895",
+            "title": "Shot 1",
+            "prompt": "A slow, deliberate zoom-in from a medium close-up to a tight close-up with shallow depth of field captures Danielle Ash sitting quietly with eyes downcast, lost in thought. Danielle, a woman in her late 40s with long, thick dark brown hair loosely styled, fair skin with warm undertones, and expressive almond-shaped hazel eyes slightly moist with emotion, sits in a softly lit room with gentle morning light filtering through a nearby window casting soft shadows across her contemplative face. 0-3 seconds: Danielle blinks slowly, her lips pressed gently together as subtle tension flickers across her brow. 3-6 seconds: Her gaze remains lowered, eyes distant, reflecting deep introspection while a faint breath escapes her slightly parted lips as if she’s quietly saying to herself, \"It took me years to finally say no.\" The setting is Danielle's private reflection space in the cozy Big Sur retreat house, where warm wood tones and soft diffused natural light create an intimate atmosphere during a serene morning. The scene is bathed in soft natural lighting with warm amber highlights and gentle blue-grey undertones, low-key with delicate contrast emphasizing the melancholy and introspective mood. A natural filmic grain texture adds emotional depth, while the quiet environment feels intimate and contemplative. Audio: Danielle softly says 'It took me years to finally say no.' Quiet room ambiance with faint distant birdsong, slow rhythmic breathing, subtle creaks from wooden floorboards, and gentle rustling of leaves outside the window."
+          },
+          {
+            "id": "shot-1762014903775-g1flf3",
+            "title": "Shot 2",
+            "prompt": "A slow, gentle pan across a warm embrace with soft focus and a slight diffusion to evoke a nostalgic and tender memory. Danielle Ash, a slender woman approximately 5'7\" with long dark brown hair styled in natural waves, is enveloped in a warm hug with a smiling figure whose features are softly blurred to maintain focus on Danielle's tentative joy. Her face glows with a gentle smile, eyes bright with cautious happiness, framed by soft golden light that bathes the scene in a comforting, intimate glow. 0-3 seconds: The camera slowly moves from Danielle's expressive face to the intertwined hands of the embrace, highlighting the warmth and connection. 3-6 seconds: The focus lingers on Danielle's face as her smile deepens slightly, conveying a mixture of hope and vulnerability. The background remains softly blurred, emphasizing the emotional significance of this memory. This flashback takes place in a warmly lit, cozy interior space within the Big Sur Retreat House, suggested by rustic wooden elements and natural stone textures just out of frame, during a peaceful morning. The warm golden lighting creates a soft halo effect around the subjects, enhancing the sentimental and reflective mood with high-key illumination and a gentle, comforting atmosphere. The color palette features warm amber and honey tones with subtle rose highlights, enhanced by a slight natural filmic grain to add texture and depth. Audio: Muffled voices expressing gratitude and gentle laughter resonate softly, layered with the ambient warmth of a quiet retreat space, including distant bird calls, a faint ocean breeze rustling through nearby trees, and the subtle creak of wooden floorboards beneath the embrace."
+          },
+          {
+            "id": "shot-1762014913568-2kc4wz",
+            "title": "Shot 3",
+            "prompt": "A slow zoom-in from a medium close-up to a tight close-up focuses steadily on Danielle Ash's face, capturing the emotional climax with a shallow depth of field that softly blurs the background. The camera remains steady at eye-level, emphasizing her determined gaze and firm set jaw as she lifts her head, meeting an imagined figure with quiet resolve. Danielle, a slender woman approximately 5'7\" with long dark brown hair styled in natural waves, is seated in her private reflection space within the Big Sur Retreat House. Morning light filters softly through wide windows, casting a gentle glow that highlights the subtle contours of her olive-toned skin and the slight furrow of her brows. 0-3 seconds: Danielle steadily lifts her head, eyes locking forward with unwavering determination. 3-6 seconds: Her firm jaw tightens slightly as her steady breath calms the rising emotional swell within. The room is cozy and softly lit, featuring warm wood tones and natural stone elements that convey a quiet sanctuary for introspection. The atmosphere is intimate and melancholic, imbued with a gentle morning light that creates soft shadows and warm amber midtones with a subtle blue tint in the background. Natural filmic grain adds texture, enhancing the emotional depth and quiet strength of the moment. Audio: Danielle quietly says 'After thirty years of saying yes to him... I finally found the strength to say no.' Soft, steady breath accompanies her words. Quiet room ambiance includes distant gentle waves crashing against nearby cliffs, faint rustling of coastal forest leaves through an open window, and a subtle emotional swell of ambient strings that underscore her resolve and introspection."
+          }
+        ]
+      },
+      "measured": {
+        "width": 887,
+        "height": 453
+      },
+      "selected": false,
+      "dragging": false
+    }
+  ],
+  "edges": [],
+  "createdAt": "2025-11-01T16:54:17.995Z",
+  "updatedAt": "2025-11-01T16:54:17.995Z"
+}
