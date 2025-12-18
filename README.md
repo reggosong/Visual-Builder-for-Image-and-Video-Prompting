@@ -4,9 +4,9 @@ A visual workflow builder for creating and managing modular video prompts. Build
 
 ## Features
 
-- 🎨 **Visual Node-Based Interface** - Drag and drop modules to create workflows
-- 🔄 **Real-Time Processing** - See results as you build your workflow
-- 📦 **Multiple Module Types**:
+- **Visual Node-Based Interface** - Drag and drop modules to create workflows
+- **Real-Time Processing** - See results as you build your workflow
+- **Multiple Module Types**:
 
   - Text Prompt Input
   - Frame Extractors (Start/End)
@@ -16,11 +16,11 @@ A visual workflow builder for creating and managing modular video prompts. Build
   - Context Prompt Builder with template variables
   - Final Output with export options
 
-- 🌙 **Dark Mode Support**
-- 💾 **Auto-Save & Import/Export**
-- ⌨️ **Keyboard Shortcuts**
-- 🔙 **Undo/Redo**
-- 📱 **Responsive Design**
+- **Dark Mode Support**
+- **Auto-Save & Import/Export**
+- ⌨**Keyboard Shortcuts**
+- **Undo/Redo**
+- **Responsive Design**
 
 ## Getting Started
 

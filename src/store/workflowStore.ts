@@ -167,10 +167,8 @@ const EXAMPLE_WORKFLOW = {
 
 // Load settings from localStorage
 // Hard-coded API keys
-const ANTHROPIC_API_KEY =
-  "REMOVED-LEAKED-KEY";
-const FAL_API_KEY =
-  "REMOVED-LEAKED-KEY";
+const ANTHROPIC_API_KEY = ""; //deactivated
+const FAL_API_KEY = ""; //deactivated
 
 const loadSettings = (): AppSettings => {
   // Initialize services with hard-coded API keys
