@@ -36,14 +36,23 @@ npm install
 
 ### Configuration
 
-1. Start the development server:
+1. Copy `.env.example` to `.env` and add your API keys (both optional — the app
+   falls back to regex extraction without them):
+
+```bash
+cp .env.example .env
+# VITE_ANTHROPIC_API_KEY=...   https://console.anthropic.com
+# VITE_FAL_API_KEY=...         https://fal.ai
+```
+
+2. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-2. Open the app in your browser at http://localhost:5173
-3. Start building your workflows! AI features are pre-configured and ready to use.
+3. Open the app in your browser at http://localhost:5173
+4. Start building your workflows! Example workflows to import live in `examples/`.
 
 ### Build for Production
 
@@ -163,11 +172,12 @@ The workflow engine uses topological sorting to execute nodes in the correct ord
 - **Use AI for Extraction & Generation**: Toggle AI features (Claude and FAL) on/off
 - **Auto-run on Connect**: Automatically execute workflow when nodes are connected
 
-**Note**: AI services (Anthropic Claude for text extraction and FAL for image generation) are pre-configured with integrated API keys.
+**Note**: AI services (Anthropic Claude for text extraction and FAL for image generation) require your own API keys, loaded from `.env` at build time (see Configuration).
 
 ## Security & Privacy
 
-- API keys are securely integrated into the application
+- API keys are loaded from environment variables (`.env`, gitignored) — never committed
+- A gitleaks pre-commit hook guards against accidental key commits: `git config core.hooksPath .githooks`
 - Data is only sent to Anthropic Claude (for text extraction) and FAL (for image generation)
 - Workflows are saved locally in your browser's localStorage
 - No user data is stored on external servers
