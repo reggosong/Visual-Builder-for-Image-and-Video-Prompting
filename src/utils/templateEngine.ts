@@ -62,7 +62,7 @@ export function processTemplate(
   // Replace all {{variable}} patterns
   const regex = /\{\{([^}]+)\}\}/g;
 
-  result = result.replace(regex, (match, varName) => {
+  result = result.replace(regex, (_match, varName) => {
     const trimmedName = varName.trim();
 
     // Check if variable exists

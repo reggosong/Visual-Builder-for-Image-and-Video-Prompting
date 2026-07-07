@@ -1,0 +1,23 @@
+#!/bin/sh
+# Pre-commit secret scan using gitleaks (https://github.com/gitleaks/gitleaks).
+#
+# One-time setup in any repo that contains this file:
+#   brew install gitleaks
+#   git config core.hooksPath .githooks
+#
+# To reuse in another repo: copy this .githooks/ directory there and run the
+# same `git config core.hooksPath .githooks` inside that repo.
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "pre-commit: gitleaks not installed (brew install gitleaks) — skipping secret scan" >&2
+  exit 0
+fi
+
+gitleaks git --pre-commit --staged --no-banner --redact
+status=$?
+if [ $status -ne 0 ]; then
+  echo "" >&2
+  echo "pre-commit: possible secret detected in staged changes. Commit blocked." >&2
+  echo "If this is a false positive, bypass once with: git commit --no-verify" >&2
+fi
+exit $status

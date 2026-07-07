@@ -165,13 +165,11 @@ const EXAMPLE_WORKFLOW = {
   ] as WorkflowEdge[],
 };
 
-// Load settings from localStorage
-// Hard-coded API keys
-const ANTHROPIC_API_KEY = ""; //deactivated
-const FAL_API_KEY = ""; //deactivated
+// API keys come from environment variables — copy .env.example to .env and fill in your keys
+const ANTHROPIC_API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY ?? "";
+const FAL_API_KEY = import.meta.env.VITE_FAL_API_KEY ?? "";
 
 const loadSettings = (): AppSettings => {
-  // Initialize services with hard-coded API keys
   initializeAnthropic(ANTHROPIC_API_KEY);
   initializeFal(FAL_API_KEY);
 
@@ -183,7 +181,7 @@ const loadSettings = (): AppSettings => {
         ...parsed,
         anthropicApiKey: ANTHROPIC_API_KEY,
         falApiKey: FAL_API_KEY,
-        useAI: true, // Force AI to always be enabled with hard-coded keys
+        useAI: true,
       };
     }
   } catch (error) {
@@ -642,7 +640,7 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
       const updatedSettings = {
         ...state.settings,
         ...newSettings,
-        // Always keep hard-coded API keys
+        // API keys always come from the environment, not user settings
         anthropicApiKey: ANTHROPIC_API_KEY,
         falApiKey: FAL_API_KEY,
       };
